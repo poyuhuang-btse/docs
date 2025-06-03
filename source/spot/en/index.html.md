@@ -13,6 +13,22 @@ headingLevel: 2
 
 # Change Log
 
+## Version 3.4.15 (9th April 2025)
+
+* Update the description for Request field `type` for [Amend order](#amend-order). This change will take effect on 18th May, 2025.
+
+## Version 3.4.14 (6th November 2024)
+
+* Add maximum days of trade history explanation for API [Query User Trades Fills](#query-user-trades-fills)
+
+## Version 3.4.13 (30th October 2024)
+
+* Add TIMEOUT status in [API Enum](#api-enum) for APIs [Create new order](#create-new-order), [Amend order](#amend-order), and [Cancel order](#cancel-order)
+
+## Version 3.4.12 (16th September 2024)
+
+* Update the permission-related content in the description of all APIs
+
 ## Version 3.4.11 (21st Aug 2024)
 
 * Description of the Index Order only supports USD quotes. [Create new order](#create-new-order)
@@ -295,6 +311,7 @@ Each API will return one of the following HTTP status:
 
 When connecting up the BTSE API, you will come across number codes that represents different states or status types in BTSE. The following section provides a list of codes that you are expecting to see.
 
+* -1: TIMEOUT= Request timeout, please check the order status
 * 1: MARKET_UNAVAILABLE = Futures market is unavailable
 * 2: ORDER_INSERTED = Order is inserted successfully
 * 4: ORDER_FULLY_TRANSACTED = Order is fully transacted
@@ -366,7 +383,7 @@ When connecting up the BTSE API, you will come across number codes that represen
     "quote": "USD",
     "active": true,
     "size": 2117.88522,
-    "minValidPrice": 0.5,
+    "minValidPrice": 0.01,
     "minPriceIncrement": 0.5,
     "minOrderSize": 0.00001,
     "maxOrderSize": 2000,
@@ -938,9 +955,10 @@ Creates a new order. Requires `Trading` permission. Please note that Index Order
 ```
 
 
-`GET /api/v3.2/order` 
+`GET /api/v3.2/order`
 
-Query order detail for a specified orderID/clOrderID, please note that a canceled order will only exist for 30 minutes. Requires `Trading` permission.
+Query order detail for a specified orderID/clOrderID, for the open orders and cancelled order which is cancelled in 30 minutes only.
+Please note that this API is `Trading` permission required.
 
 ### Request Parameters
 
@@ -979,7 +997,7 @@ Query order detail for a specified orderID/clOrderID, please note that a cancele
 | remainingSize                 | Double  | Yes      | remainingSize                                                                          |
 | status                        | Integer | Yes      | Order status. Please refer to [`API Enum`](#api-enum)                                  |
 | timeInForce                   | String  | Yes      | Order validity                                                                         |
- 
+
 ## Amend Order
 
 > Request (amend price)
@@ -1060,7 +1078,7 @@ Query order detail for a specified orderID/clOrderID, please note that a cancele
 
 `PUT /api/v3.2/order`
 
-Amend the price or size or trigger price of an order. For trigger orders, if the order has already been triggered, the trigger price cannot be further amended. Amend order _does not_ apply to algo orders
+Amend the price or size or trigger price of an order. For trigger orders, if the order has already been triggered, the trigger price cannot be further amended. Amend order _does not_ apply to algo orders. Requires `Trading` permission.
 
 ### Request Parameters
 
@@ -1069,7 +1087,7 @@ Amend the price or size or trigger price of an order. For trigger orders, if the
 | symbol       | string  | Yes      | Market symbol                                                                                                                                                      |
 | orderID      | string  | No       | Internal order ID. Mandatory when `clOrderID` is not provided. If `orderID` is provided, `clOrderID` will be ignored.                                              |
 | clOrderID    | string  | No       | Custom order ID. Mandatory when `orderID` is not provided.                                                                                                         |
-| type         | string  | Yes      | Type of amendment<br/>`PRICE`: To amend order price<br/>`SIZE`: To amend order size<br/>`TRIGGERPRICE`: To amend trigger price<br/>`ALL`: to amend multiple fields |
+| type         | string  | Yes      | Type of amendment.<br/>`PRICE`: To amend order price<br/>`SIZE`: To amend order size<br/>`TRIGGERPRICE`: To amend trigger price for trigger orders only.<br/>`ALL`: To amend multiple fields. Note that the `TRIGGERPRICE` can only be amended if the order is a trigger order. Don't include `TRIGGERPRICE` if it is not a trigger order. |
 | value        | double  | No       | Mandatory for types: `PRICE`, `SIZE`, `TRIGGERPRICE`. The value to be amended to. Value depends on the type being set.                                             |
 | orderPrice   | double  | No       | For type: `ALL`, order price to be amended                                                                                                                         |
 | orderSize    | double  | No       | For type: `ALL`, order size to be amended                                                                                                                          |
@@ -1192,7 +1210,7 @@ Amend the price or size or trigger price of an order. For trigger orders, if the
 
 `DELETE /api/v3.2/order`
 
-Cancels pending orders that has not yet been transacted. The `orderID` is a unique identifier to cancel a particular order. `clOrderID` is a custom ID sent in by the trader. When cancel by `clOrderID`, all orders having the same ID will be cancelled. If `orderID` and `clOrderID` is not sent in, then cancellation will be for all orders in the current market.
+Cancels pending orders that has not yet been transacted. The `orderID` is a unique identifier to cancel a particular order. `clOrderID` is a custom ID sent in by the trader. When cancel by `clOrderID`, all orders having the same ID will be cancelled. If `orderID` and `clOrderID` is not sent in, then cancellation will be for all orders in the current market. Requires `Trading` permission.
 
 ### Request Parameters
 
@@ -1238,7 +1256,7 @@ Cancels pending orders that has not yet been transacted. The `orderID` is a uniq
 
 `POST /api/v3.2/order/cancelAllAfter`
 
-Dead-man's switch allows the trader to send in a timeout value which is a Time to live (TTL) value for an order. Extension of the timeout is done by sending another `cancelAllAfter` request. If the server does not receive another request before the timeout is reached, all orders will be cancelled.
+Dead-man's switch allows the trader to send in a timeout value which is a Time to live (TTL) value for an order. Extension of the timeout is done by sending another `cancelAllAfter` request. If the server does not receive another request before the timeout is reached, all orders will be cancelled. Requires `Trading` permission.
 
 ### Request Parameters
 
@@ -1290,7 +1308,7 @@ Dead-man's switch allows the trader to send in a timeout value which is a Time t
 
 `GET /api/v3.2/user/open_orders`
 
-Retrieves open orders that have not yet been matched or matched recently.
+Retrieves open orders that have not yet been matched or matched recently. Requires `Trading` permission.
 
 ### Request Parameters
 
@@ -1368,7 +1386,7 @@ Retrieves open orders that have not yet been matched or matched recently.
 
 `GET /api/v3.2/user/trade_history`
 
-Retrieves a user's trade history which includes funding fee data.
+Retrieves a user's trade history which includes funding fee data. Requires `Read` permission.
 
 ### Request Parameters
 
@@ -1382,6 +1400,14 @@ Retrieves a user's trade history which includes funding fee data.
 | orderID       | string  | No       | Query trade history by order ID                                                             |
 | isMatchSymbol | boolean | No       | Exact match on `symbol`. If this sets to true, will only match records for that symbol only |
 
+* maximum days of trade history
+
+| Time Interval       | Maximum Days  | Explanation                                                                             |
+| :---:               | ---:          | :---:                                                                                   |
+| startTime / endTime | 7            | Maximum **7** days within the specified interval. If specified interval exceeds **7** days, the **start time** will be set to **7** days before the **end time**                                    |
+| startTime /    -    | 7             | If the **end time** is not specified, then **7** days after the **start time**          |
+|      -    / endTime | 7             | If the **start time** is not specified, then **7** days before the **end time**         |
+|      -    /    -    | 7             | If neither start nor end time is specified, then **7** days before the **current time** |
 
 ### Response Content
 
@@ -1424,9 +1450,9 @@ Retrieves a user's trade history which includes funding fee data.
 }
 ```
 
-`get /api/v3.2/user/fees`
+`GET /api/v3.2/user/fees`
 
-retrieve user's trading fees
+Retrieve user's trading fees. Requires `Read` permission.
 
 ### request parameters
 
@@ -1474,9 +1500,9 @@ retrieve user's trading fees
 ]
 ```
 
-`get /api/v3.2/invest/products`
+`GET /api/v3.2/invest/products`
 
-get all investment products
+Get all investment products. Requires `Read` permission.
 
 ### request parameters
 
@@ -1518,9 +1544,9 @@ get all investment products
 }
 ```
 
-`post /api/v3.2/invest/deposit`
+`POST /api/v3.2/invest/deposit`
 
-deposit an investment
+Deposit an investment. Requires `Wallet` permission.
 
 ### request parameters
 
@@ -1550,9 +1576,9 @@ deposit an investment
 }
 ```
 
-`post /api/v3.2/invest/renew`
+`POST /api/v3.2/invest/renew`
 
-renew an investment order
+Renew an investment order. Requires `Wallet` permission.
 
 ### request parameters
 
@@ -1580,9 +1606,9 @@ renew an investment order
 }
 ```
 
-`post /api/v3.2/invest/redeem`
+`POST /api/v3.2/invest/redeem`
 
-redeem an investment order
+Redeem an investment order. Requires `Wallet` permission.
 
 ### request parameters
 
@@ -1620,9 +1646,9 @@ redeem an investment order
 ]
 ```
 
-`get /api/v3.2/invest/orders`
+`GET /api/v3.2/invest/orders`
 
-query investment orders
+Query investment orders. Requires `Wallet` permission.
 
 ### response content
 
@@ -1667,9 +1693,9 @@ query investment orders
 ]
 ```
 
-`get /api/v3.2/invest/history`
+`GET /api/v3.2/invest/history`
 
-query investment history
+Query investment history. Requires `Wallet` permission.
 
 ### response content
 
@@ -1695,7 +1721,7 @@ query investment history
   * Testnet
      * `wss://testws.btse.io/ws/oss/spot`
 
-## OSS L1 Snapshot (By grouping)
+## OSS L1 Snapshot
 
 > Request
 
@@ -1703,14 +1729,14 @@ query investment history
 {
   "op": "subscribe",
   "args": [
-    "snapshotL1:BTC-USD_0"
+    "snapshotL1:BTC-USD"
   ]
 }
 
 {
   "op": "unsubscribe",
   "args": [
-    "snapshotL1:BTC-USD_0"
+    "snapshotL1:BTC-USD"
   ]
 }
 ```
@@ -1719,7 +1745,7 @@ query investment history
 
 ```json
 {
-  "topic": "snapshotL1:BTC-USD_0",
+  "topic": "snapshotL1:BTC-USD",
   "data": {
     "bids": [
       [
@@ -1740,10 +1766,9 @@ query investment history
 }
 ```
 
-Subscribe to the Level 1 Orderbook through the endpoint `wss://ws.btse.com/ws/oss/spot`. The format to subscribe to will be `symbol_grouping`.
+Subscribe to the Level 1 Orderbook through the endpoint `wss://ws.btse.com/ws/oss/spot`. The format to subscribe to will be `symbol`.
 
 * `symbol` indicates the market symbol
-* `grouping` indicates the grouping granularity. Valid values are 0-8.
 
 ### Response Content
 
@@ -2168,7 +2193,7 @@ Receive trade notifications by subscribing to the topic `notificationApiV2`. The
     "size": "filled size",
     "feeAmount": "Fees charged to user, value to be String on API",
     "feeCurrency": "Fee currency, eg. Buy would be BTC, Sell would be USD",
-    "base": "Base currency, eg. BTC", 
+    "base": "Base currency, eg. BTC",
     "quote": "Quote currency eg. USD",
     "maker": "maker or taker",
     "timestamp": "Time trade was matched in the engine",

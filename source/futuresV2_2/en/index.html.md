@@ -13,6 +13,26 @@ headingLevel: 2
 
 # Change Log
 
+## Version 1.0.7 (14th May 2025)
+
+* Add API for querying [Default Market Setting](#market-risk-limit-setting), including initial margin and maintenance margin by each market and each risk limit level. This change will take effect on 28th May, 2025.
+
+## Version 1.0.6 (9th April 2025)
+
+* Update the description for Request field `type` for [Amend order](#amend-order). This change will take effect on 18th May, 2025.
+
+## Version 1.0.5 (6th November 2024)
+
+* Add maximum days of trade history explanation for API [Query Trades Fills](#query-trades-fills-2)
+
+## Version 1.0.4 (16th September 2024)
+
+* Update the permission-related content in the description of all APIs
+
+## Version 1.0.3 (6th August 2024)
+
+* Change the response content of the API [`Get Leverage`](#get-leverage) to an array
+
 ## Version 1.0.2 (1st August 2024)
 
 * Add API for querying [`User Initial Margin Percentage And Maintenance Margin Percentage`](#query-user-initial-margin-percentage-and-maintenance-margin-percentage)
@@ -32,7 +52,7 @@ headingLevel: 2
 * All the symbol field in request should use `XXX-PERP`. e.g. `BTC-PERP`
 * All symbol field in responses will change from `XXXPFC` to `XXX-PERP`. e.g. `BTCPFC` -> `BTC-PERP`
 * All market field in responses will change from `XXXPFC-USD` to `XXX-PERP-USDT`. e.g. `BTCPFC-USD` -> `BTC-PERP-USDT`
-* All wallet name field in responses will change from `ISOLATED@XXXPFC-USD` to `ISOLATED@XXX-PERP-USDT`. e.g. `ISOLATED@BTCPFC-USD` -> `ISOLATED@BTC-PERP-USDT` 
+* All wallet name field in responses will change from `ISOLATED@XXXPFC-USD` to `ISOLATED@XXX-PERP-USDT`. e.g. `ISOLATED@BTCPFC-USD` -> `ISOLATED@BTC-PERP-USDT`
 * Quote currency field in responses will change from `USD` to `USDT`
 * Once the user upgrade the wallet to unified wallet, the user is not allowed to use v2.1 APIs anymore
 
@@ -80,7 +100,7 @@ You will need to create an API key on the BTSE platform before you can use authe
 
 ```shell
 $ echo -n "/api/v2.2/user/wallet1624984297330" | openssl dgst -sha384 -hmac "848db84ac252b6726e5f6e7a711d9c96d9fd77d020151b45839a5b59c37203bx"
-(stdin)= ea4f1f2b43a0f4d750ae560c5274d6214d140fcab3093da5f4a83e36828535bd2ba7b12160cd12199596f422c8883333
+(stdin)= 72021c3b7b6f88dc1bbd1bde253f08d9bb12e4ba7d9b071ae801fee15bc2347a1bab2e3fa0a230ce5fadcd9c616fe44f
 ```
 
 * Endpoint to get wallet is `https://api.btse.com/futures/api/v2.2/user/wallet`
@@ -90,7 +110,7 @@ $ echo -n "/api/v2.2/user/wallet1624984297330" | openssl dgst -sha384 -hmac "848
   * secret: `848db84ac252b6726e5f6e7a711d9c96d9fd77d020151b45839a5b59c37203bx`
   * Path: `/api/v2.2/user/wallet`
 * Generated signature will be:
-  * request-sign: `ea4f1f2b43a0f4d750ae560c5274d6214d140fcab3093da5f4a83e36828535bd2ba7b12160cd12199596f422c8883333`
+  * request-sign: `72021c3b7b6f88dc1bbd1bde253f08d9bb12e4ba7d9b071ae801fee15bc2347a1bab2e3fa0a230ce5fadcd9c616fe44f`
 
 ### Example 2: Place an order
 
@@ -98,7 +118,7 @@ $ echo -n "/api/v2.2/user/wallet1624984297330" | openssl dgst -sha384 -hmac "848
 
 ```shell
 $ echo -n "/api/v2.2/order1624985375123{\"postOnly\":false,\"price\":8500.0,\"reduceOnly\":false,\"side\":\"BUY\",\"size\":1,\"stopPrice\":0.0,\"symbol\":\"BTC-PERP\",\"time_in_force\":\"GTC\",\"trailValue\":0.0,\"triggerPrice\":0.0,\"txType\":\"LIMIT\",\"type\":\"LIMIT\"}" | openssl dgst -sha384 -hmac "848db84ac252b6726e5f6e7a711d9c96d9fd77d020151b45839a5b59c37203bx"
-(stdin)= 943adfce43b609a28506274976b96e08cf4bdc4ea53ca0b4cac0eb2cf0773a7d0807efc0aeab779d47fadcd9a60eea13
+(stdin)= 3b900afa243651ef07a61cb6f2a4a6779c6d28e9b0a0ff9ffa3524d4945fafaa864670e45559aa01f49e62c9fb96417e
 ```
 
 * Endpoint to place an order is `https://api.btse.com/futures/api/v2.2/order`
@@ -110,7 +130,7 @@ $ echo -n "/api/v2.2/order1624985375123{\"postOnly\":false,\"price\":8500.0,\"re
   * Body: `{"postOnly":false,"price":8500.0,"reduceOnly":false,"side":"BUY","size":1,"stopPrice":0.0,"symbol":"BTC-PERP","time_in_force":"GTC","trailValue":0.0,"triggerPrice":0.0,"txType":"LIMIT","type":"LIMIT"}`
   * Encrypted Text: `/api/v2.2/order1624985375123{"postOnly":false,"price":8500.0,"reduceOnly":false,"side":"BUY","size":1,"stopPrice":0.0,"symbol":"BTC-PERP","time_in_force":"GTC","trailValue":0.0,"triggerPrice":0.0,"txType":"LIMIT","type":"LIMIT"}`
 * Generated signature will be:
-  * request-sign: `943adfce43b609a28506274976b96e08cf4bdc4ea53ca0b4cac0eb2cf0773a7d0807efc0aeab779d47fadcd9a60eea13`
+  * request-sign: `3b900afa243651ef07a61cb6f2a4a6779c6d28e9b0a0ff9ffa3524d4945fafaa864670e45559aa01f49e62c9fb96417e`
 
 
 ## Rate Limits
@@ -550,8 +570,8 @@ Get trade fills for the market specified by `symbol`
 | symbol             | string  | Yes      | Market symbol                                                                     |
 | startTime          | long    | No       | Starting time in milliseconds (eg. 1624987283000)                                 |
 | endTime            | long    | No       | Ending time in milliseconds (eg. 1624987283000)                                   |
-| beforeSerialId     | string  | Yes      | Condition to retrieve records before the specified serial Id. Used for pagination |
-| afterSerialId      | string  | Yes      | Condition to retrieve records after the specified serial Id. Used for pagination  |
+| beforeSerialId     | long  | No      | Used for pagination to retrieve records when the order volume exceeds **500 per millisecond**. For typical scenarios, it is recommended to use the `startTime` and `endTime` parameters instead. |
+| afterSerialId      | long  | No      | Used for pagination to retrieve records when the order volume exceeds **500 per millisecond**. For typical scenarios, it is recommended to use the `startTime` and `endTime` parameters instead. |
 | count              | long    | Yes      | Number of records to return                                                       |
 | includeOld         | boolean | Yes      | Retrieve trade  history records past 7 days                                       |
 
@@ -603,6 +623,146 @@ Get funding rate history for certain symbols
 | symbol    | string | Yes      | Market symbol                                     |
 | time      | long   | Yes      | The epoch timestamp in second of the funding rate |
 | rate      | double | Yes      | Funding rate                                      |
+
+
+## Market Risk Limit Setting
+
+> Response ( Successful )
+
+```json
+{
+    "code": 1,
+    "msg": "Success",
+    "time": 1747207591721,
+    "data": [
+        {
+            "symbol": "SOL-PERP",
+            "riskLevel": 1,
+            "riskLimitValue": 10000,
+            "initialMarginRate": 0.02,
+            "maintenanceMarginRate": 0.015,
+            "maxLeverage": 50
+        },
+        {
+            "symbol": "SOL-PERP",
+            "riskLevel": 2,
+            "riskLimitValue": 20000,
+            "initialMarginRate": 0.025,
+            "maintenanceMarginRate": 0.02,
+            "maxLeverage": 40
+        },
+        {
+            "symbol": "SOL-PERP",
+            "riskLevel": 3,
+            "riskLimitValue": 30000,
+            "initialMarginRate": 0.03,
+            "maintenanceMarginRate": 0.025,
+            "maxLeverage": 33.33
+        },
+        {
+            "symbol": "SOL-PERP",
+            "riskLevel": 4,
+            "riskLimitValue": 40000,
+            "initialMarginRate": 0.035,
+            "maintenanceMarginRate": 0.03,
+            "maxLeverage": 28.57
+        },
+        {
+            "symbol": "SOL-PERP",
+            "riskLevel": 5,
+            "riskLimitValue": 50000,
+            "initialMarginRate": 0.04,
+            "maintenanceMarginRate": 0.035,
+            "maxLeverage": 25
+        },
+        {
+            "symbol": "SOL-PERP",
+            "riskLevel": 6,
+            "riskLimitValue": 60000,
+            "initialMarginRate": 0.045,
+            "maintenanceMarginRate": 0.04,
+            "maxLeverage": 22.22
+        },
+        {
+            "symbol": "SOL-PERP",
+            "riskLevel": 7,
+            "riskLimitValue": 70000,
+            "initialMarginRate": 0.05,
+            "maintenanceMarginRate": 0.045,
+            "maxLeverage": 20
+        },
+        {
+            "symbol": "SOL-PERP",
+            "riskLevel": 8,
+            "riskLimitValue": 80000,
+            "initialMarginRate": 0.055,
+            "maintenanceMarginRate": 0.05,
+            "maxLeverage": 18.18
+        },
+        {
+            "symbol": "SOL-PERP",
+            "riskLevel": 9,
+            "riskLimitValue": 90000,
+            "initialMarginRate": 0.06,
+            "maintenanceMarginRate": 0.055,
+            "maxLeverage": 16.67
+        },
+        {
+            "symbol": "SOL-PERP",
+            "riskLevel": 10,
+            "riskLimitValue": 100000,
+            "initialMarginRate": 0.065,
+            "maintenanceMarginRate": 0.06,
+            "maxLeverage": 15.38
+        }
+    ],
+    "success": true
+}
+```
+
+> Response ( Failed to find the market )
+
+```json
+{
+    "code": -2,
+    "msg": "Invalid request parameters",
+    "time": 1747207833879,
+    "data": null,
+    "success": false
+}
+```
+
+`GET /api/v2.2/market/risk_limit`
+
+Gets all default market settings, including initial margin and maintenance margin by each market and each risk limit level. You'll retrieve all markets if no symbol parameter is sent.
+
+### Request Parameters
+
+| Name               | Type    | Required | Description                                                            |
+| ---                | ---     | ---      | ---                                                                    |
+| symbol             | string  | No       | Market symbol              |
+
+### Response Content
+
+| Name                     | Type     | Required | Description                                                                                           |
+| ---                      | ---      | ---      | ---                                                                                                   |
+| code                     | integer   | Yes     | Response code                                                                                                  |
+| msg                      | integer  | Yes      | Response message                                                                                               |
+| time                     | integer  | Yes      | Response Time                                                                                                  |
+| data                     | object   | No       |  Refer to data object below                                                                                                 |
+| success                  | boolean   | Yes      | Whether or not query is successful                                                                                                  |
+
+### Data Object
+
+| Name                     | Type     | Required | Description                                                                                           |
+| ---                      | ---      | ---      | ---                                                                                                   |
+| symbol                   | string   | Yes      | Market symbol                                                                                                |
+| riskLevel                | integer  | Yes      | Risk level                                                                                                 |
+| riskLimitValue           | integer  | Yes      | Risk limit value for current risk level in coin size                                                                                                  |
+| initialMarginRate        | double   | Yes      | Initial margin rate                                                                                     |
+| maintenanceMarginRate    | double   | Yes      | Maintenance margin rate                                                                                                  |
+| maxLeverage              | double   | Yes      | Max leverage for current risk level                                                                                                  |
+
 
 # Trade Endpoints
 
@@ -863,7 +1023,7 @@ Get funding rate history for certain symbols
 
 `POST /api/v2.2/order`
 
-Creates a new order. Requires `Trading` permission
+Creates a new order. Requires `Trading` permission.
 
 ### Request Parameters
 
@@ -883,9 +1043,9 @@ Creates a new order. Requires `Trading` permission
 | reduceOnly    | boolean | No       | Boolean to indicate if this is a reduce only order, if in hedge mode, it is used to reduce the specified position, ex: sell to reduce long position, buy to reduce short position.                                                                                                                                                                                 |
 | clOrderID     | string  | No       | Custom order Id                                                                                                                                                                                                                                                                                                                                                    |
 | trigger       | string  | No       | For creating order with txType: `STOP` or `TRIGGER`. Valid options: `markPrice` (default) or `lastPrice`|
-| takeProfitPrice  | double  | No       | Mandatory when creating new order with take profit order. Indicates the trigger price     
+| takeProfitPrice  | double  | No       | Mandatory when creating new order with take profit order. Indicates the trigger price
 | takeProfitTrigger       | string  | No       | For creating order with take profit order. Valid options: `markPrice` (default) or `lastPrice`|
-| stopLossPrice  | double  | No       | Mandatory when creating new order with stop loss order. Indicates the trigger price       
+| stopLossPrice  | double  | No       | Mandatory when creating new order with stop loss order. Indicates the trigger price
 | stopLossTrigger       | string  | No       | For creating order with stop loss order. Valid options: `markPrice` (default) or `lastPrice`|
 | positionMode  | string  | No       | For creating order and wanting to specify the positionMode. Valid options: `ONE_WAY` (default) , `HEDGE` , `ISOLATED`                                                                                                                                                                                                                                                          |
 
@@ -973,7 +1133,7 @@ Creates a new algo order. Algo order is an order that price will change accordin
 * `deviation`: How much should the order price deviate from index price. Value is in percentage and can range from `-10` to `10`
 * `stealth`: How many percent of the order is to be displayed on the orderbook.
 
-This API Requires `Trading` permission
+This API Requires `Trading` permission.
 
 ### Request Parameters
 
@@ -1057,7 +1217,7 @@ This API Requires `Trading` permission
 }
 ```
 
-`GET /api/v2.2/order` 
+`GET /api/v2.2/order`
 
 Query order detail for a specified orderID/clOrderID, please note that a canceled order will only exist for 30 minutes. Requires `Trading` permission.
 
@@ -1105,7 +1265,7 @@ Query order detail for a specified orderID/clOrderID, please note that a cancele
 
 ## Amend Order
 
-> Request (amend price)
+> Request (Amend price)
 
 ```json
 {
@@ -1116,7 +1276,18 @@ Query order detail for a specified orderID/clOrderID, please note that a cancele
 }
 ```
 
-> Request (amend all)
+> Request (Amend size)
+
+```json
+{
+  "symbol": "BTC-PERP",
+  "orderID": "604c3ebf-d7fa-468d-9ff0-f6ad030221b4",
+  "type": "SIZE",
+  "value": 100
+}
+```
+
+> Request (Amend all - trigger Order.)
 
 ```json
 {
@@ -1126,6 +1297,18 @@ Query order detail for a specified orderID/clOrderID, please note that a cancele
   "orderPrice": 30010,
   "orderSize": 1,
   "triggerPrice": 30000
+}
+```
+
+> Request (Amend all - Not trigger order.)
+
+```json
+{
+  "symbol": "BTC-PERP",
+  "orderID": "604c3ebf-d7fa-468d-9ff0-f6ad030221b4",
+  "type": "ALL",
+  "orderPrice": 30010,
+  "orderSize": 1
 }
 ```
 
@@ -1172,11 +1355,11 @@ Amend the price or size or trigger price of an order. For trigger orders, if the
 | symbol       | string  | Yes      | Market symbol                                                                                                                                                      |
 | orderID      | string  | No       | Internal order ID. Mandatory when `clOrderID` is not provided. If `orderID` is provided, `clOrderID` will be ignored.                                              |
 | clOrderID    | string  | No       | Custom order ID. Mandatory when `orderID` is not provided.                                                                                                         |
-| type         | string  | Yes      | Type of amendmend<br/>`PRICE`: To amend order price<br/>`SIZE`: To amend order size<br/>`TRIGGERPRICE`: To amend trigger price<br/>`ALL`: to amend multiple fields |
+| type         | string  | Yes      | Type of amendment.<br/>`PRICE`: To amend order price<br/>`SIZE`: To amend order size<br/>`TRIGGERPRICE`: To amend trigger price for trigger orders only.<br/>`ALL`: To amend multiple fields. Note that the `TRIGGERPRICE` can only be amended if the order is a trigger order. Don't include `TRIGGERPRICE` if it is not a trigger order. |
 | value        | number  | Yes      | The value to be amended to. Value depends on the type being set.                                                                                                   |
-| orderPrice   | number  | No       | For type: `ALL`, order price to be amended                                                                                                                         |
-| orderSize    | number  | No       | For type: `ALL`, order size in contract size to be amended                                                                                                         |
-| triggerPrice | number  | No       | For type: `ALL`, trigger price to be amended                                                                                                                       |
+| orderPrice   | number  | No       | For type: `ALL`, order price to be amended.                                                                                                                         |
+| orderSize    | number  | No       | For type: `ALL`, order size in contract size to be amended.                                                                                                         |
+| triggerPrice | number  | No       | For type: `ALL`, trigger price to be amended.                                                                                                                       |
 
 
 ### Response Content
@@ -1250,6 +1433,7 @@ Amend the price or size or trigger price of an order. For trigger orders, if the
 `DELETE /api/v2.2/order`
 
 Cancels pending orders that has not yet been transacted. The `orderID` is a unique identifier to cancel a particular order. `clOrderID` is a custom ID sent in by the trader. When cancel by `clOrderID`, all orders having the same ID will be cancelled. If `orderID` and `clOrderID` is not sent in, then cancellation will be for all orders in the current market.
+Requires `Trading` permission.
 
 ### Request Parameters
 
@@ -1300,7 +1484,7 @@ Cancels pending orders that has not yet been transacted. The `orderID` is a uniq
 
 `POST /api/v2.2/order/cancelAllAfter`
 
-Dead-man's switch allows the trader to send in a timeout value which is a Time to live (TTL) value for an order. Extension of the timeout is done by sending another `cancelAllAfter` request. If the server does not receive another request before the timeout is reached, all orders will be cancelled.
+Dead-man's switch allows the trader to send in a timeout value which is a Time to live (TTL) value for an order. Extension of the timeout is done by sending another `cancelAllAfter` request. If the server does not receive another request before the timeout is reached, all orders will be cancelled. Requires `Trading` permission.
 
 ### Request Parameters
 
@@ -1378,7 +1562,7 @@ Dead-man's switch allows the trader to send in a timeout value which is a Time t
 
 `GET /api/v2.2/user/open_orders`
 
-Retrieves open orders that have not yet been matched or matched recently.
+Retrieves open orders that have not yet been matched or matched recently. Requires `Read` permission.
 
 ### Request Parameters
 
@@ -1475,7 +1659,7 @@ Retrieves open orders that have not yet been matched or matched recently.
 
 `GET /api/v2.2/user/trade_history`
 
-Retrieves a user's trade history
+Retrieves a user's trade history. Requires `Read` permission.
 
 ### Request Parameters
 
@@ -1484,12 +1668,23 @@ Retrieves a user's trade history
 | symbol             | string  | No       | Market symbol                                                                     |
 | startTime          | long    | No       | Starting time (eg. 1624987283000)                                                 |
 | endTime            | long    | No       | Ending time (eg. 1624987283000)                                                   |
-| beforeSerialId     | string  | No       | Condition to retrieve records before the specified serial Id. Used for pagination |
-| afterSerialId      | string  | No       | Condition to retrieve records after the specified serial Id. Used for pagination  |
+| beforeSerialId     | long  | No       | Used for pagination to retrieve records when the order volume exceeds **500 per millisecond**. For typical scenarios, it is recommended to use the `startTime` and `endTime` parameters instead. |
+| afterSerialId      | long  | No       | Used for pagination to retrieve records when the order volume exceeds **500 per millisecond**. For typical scenarios, it is recommended to use the `startTime` and `endTime` parameters instead. |
 | count              | long    | No       | Number of records to return                                                       |
 | includeOld         | boolean | No       | Retrieve trade  history records past 7 days                                       |
 | orderID            | string  | No       | Query trade history by order ID                                            |
 | clOrderID          | string  | No       | Query trade history by custom order ID                                            |
+
+
+* maximum days of trade history
+
+| Time Interval       | Maximum Days  | Explanation                                                                             |
+| :---:               | ---:          | :---:                                                                                   |
+| startTime / endTime | 7            | Maximum **7** days within the specified interval. If specified interval exceeds **7** days, the **start time** will be set to **7** days before the **end time**                                    |
+| startTime /    -    | 7             | If the **end time** is not specified, then **7** days after the **start time**          |
+|      -    / endTime | 7             | If the **start time** is not specified, then **7** days before the **end time**         |
+|      -    /    -    | 7             | If neither start nor end time is specified, then **7** days before the **current time** |
+
 
 ### Response Content
 
@@ -1597,6 +1792,7 @@ Retrieves a user's trade history
 `GET /api/v2.2/user/positions`
 
 Queries user's current position. When no symbol is specified, positions for all markets will be returned.
+Requires `Read` permission.
 
 ### Request Parameters
 
@@ -1686,7 +1882,7 @@ Queries user's current position. When no symbol is specified, positions for all 
 
 `POST /api/v2.2/order/close_position`
 
-Closes a user's position for the particular market as specified by symbol. If type is specified as LIMIT, then price is mandatory. When type is MARKET, it closes the position at market price.
+Closes a user's position for the particular market as specified by symbol. If type is specified as LIMIT, then price is mandatory. When type is MARKET, it closes the position at market price. Requires `Trading` permission.
 
 ### Request Parameters
 
@@ -1745,7 +1941,8 @@ Closes a user's position for the particular market as specified by symbol. If ty
 ```
 `GET /api/v2.2/risk_limit`
 
-Query risk limit for the specified market
+Query risk limit for the specified market. Requires `Read` permission.
+
 ### Request Parameters
 
 | Name               | Type    | Required | Description |
@@ -1794,7 +1991,7 @@ Query risk limit for the specified market
 
 `POST /api/v2.2/risk_limit`
 
-Changes risk limit for the specified market
+Changes risk limit for the specified market. Requires `Trading` permission.
 
 ### Request Parameters
 
@@ -1851,7 +2048,7 @@ Changes risk limit for the specified market
 
 `POST /api/v2.2/leverage`
 
-Change leverage values for the specified market
+Change leverage values for the specified market. Requires `Trading` permission.
 
 ### Request Parameters
 
@@ -1878,16 +2075,25 @@ Change leverage values for the specified market
 > Response
 
 ```json
-{
-  "symbol": "BTC-PERP",
-  "leverage": 100.0,
-  "marginMode": "ISOLATED"
-}
+[
+  {
+    "symbol": "BTC-PERP",
+    "leverage": 10,
+    "marginMode": "ISOLATED",
+    "positionDirection": "LONG"
+  },
+  {
+    "symbol": "BTC-PERP",
+    "leverage": 3,
+    "marginMode": "ISOLATED",
+    "positionDirection": "SHORT"
+  }
+]
 ```
 
 `Get /api/v2.2/leverage`
 
-Get leverage value for the specified market
+Get leverage value for the specified market. Requires `Read` permission.
 
 ### Request Parameters
 
@@ -1897,11 +2103,12 @@ Get leverage value for the specified market
 
 ### Response Content
 
-| Name      | Type    | Required | Description                                                                                          |
-| ---       | ---     | ---      |------------------------------------------------------------------------------------------------------|
-| symbol    | string  | Yes      | Market symbol                                                                                        |
-| leverage  | double  | Yes      | Current leverage value for the market, return 0 means the leverage is the maximum cross leverage     |
-| marginMode| string  | Yes      | Current margin mode                                                                                  |
+| Name              | Type   | Required | Description                                                                                          |
+| ---               | ---    | ---      |------------------------------------------------------------------------------------------------------|
+| symbol            | string | Yes      | Market symbol                                                                                        |
+| leverage          | double | Yes      | Current leverage value for the market, return 0 means the leverage is the maximum cross leverage     |
+| marginMode        | string | Yes      | Current margin mode                                                                                  |
+| positionDirection | string | Yes      | Current position direction when position mode is Hedge else return null                              |
 
 ## Change Contract Settlement Currency
 
@@ -1936,7 +2143,7 @@ Get leverage value for the specified market
 
 `POST /api/v2.2/settle_in`
 
-Changes the settlement currency for the position in the current market
+Changes the settlement currency for the position in the current market. Requires `Trading` permission.
 
 ### Request Parameters
 
@@ -1968,7 +2175,7 @@ Changes the settlement currency for the position in the current market
 
 `GET /api/v2.2/user/fees`
 
-Retrieve user's trading fees
+Retrieve user's trading fees. Requires `Read` permission.
 
 ### Request Parameters
 
@@ -2033,12 +2240,12 @@ Retrieve user's trading fees
 
 `POST /api/v2.2/order/bind/tpsl`
 
-Bind TP/SL with an existing position
+Bind TP/SL with an existing position. Requires `Trading` permission.
 
 ### Request Parameters
 
 | Name               | Type    | Required | Description
-| ---                | ---     | ---      | --- 
+| ---                | ---     | ---      | ---
 | symbol             | string  | yes       | Market symbol
 | side               | string  | yes       | "BUY" or "SELL" Mandatory when positionMode is `HEDGE`, in hedge mode, it is used to clsoe the specified position, ex: sell to close long position, buy to close short position
 | takeProfitPrice    | double  | No        | Mandatory when creating new order with take profit order. Indicates the trigger price. Must set takeProfitPrice or stopLossPrice at least when using this API. |
@@ -2095,7 +2302,7 @@ Bind TP/SL with an existing position
 
 `GET /api/v2.2/position_mode`
 
-Retrieve user's position mode
+Retrieve user's position mode. Requires `Read` permission.
 
 ### Request Parameters
 
@@ -2123,7 +2330,7 @@ Retrieve user's position mode
 
 `POST /api/v2.2/position_mode`
 
-Changes position mode
+Changes position mode. Requires `Trading` permission.
 
 ### Request Parameters
 
@@ -2163,7 +2370,7 @@ Changes position mode
 
 `GET /api/v2.2/user/margin_setting`
 
-Queries user's initial margin percentage and maintenance margin percentage. When no symbol is specified, margin percentage for all markets will be returned.
+Queries user's initial margin percentage and maintenance margin percentage. When no symbol is specified, margin percentage for all markets will be returned. Requires `Read` permission.
 
 ### Request Parameters
 
@@ -2284,7 +2491,7 @@ Query user's wallet balance. Requires `Read` permissions on the API key.
 
 `GET /api/v2.2/user/wallet_history`
 
-Get user's wallet history records on the futures wallet
+Get user's wallet history records on the futures wallet. Requires `Read` permission.
 
 ### Request Parameters
 
@@ -2336,7 +2543,7 @@ Get user's wallet history records on the futures wallet
 
 **This API is for the users who have upgraded wallet**
 
-Gets margin information for the specified wallet or position. 
+Gets margin information for the specified wallet or position. Requires `Read` permission.
 
 
 ### Request Parameters
@@ -2407,9 +2614,10 @@ Gets margin information for the specified wallet or position.
 
 `GET /api/v2.2/user/margin`
 
-The users who have upgraded wallet to unified wallet are not allow to use this API. Please use [`Query Unified Wallet Margin`](#query-unified-wallet-margin).  
+The users who have upgraded wallet to unified wallet are not allow to use this API. Please use [`Query Unified Wallet Margin`](#query-unified-wallet-margin).
 
 Gets margin information for the specified wallet so that users can know which wallet they are currently using in the market.
+Requires `Read` permission.
 
 ### Request Parameters
 
@@ -2507,7 +2715,7 @@ Gets margin information for the specified wallet so that users can know which wa
 
 `POST /api/v2.2/user/wallet/transfer`
 
-Transfers funds between user's wallet. User can specify the source and target wallet to transfer funds
+Transfers funds between user's wallet. User can specify the source and target wallet to transfer funds. Requires `Transfer` permission.
 
 ### Request Parameters
 
@@ -2564,9 +2772,8 @@ Transfers funds between user's wallet. User can specify the source and target wa
 
 `POST /api/v2.2/subaccount/wallet/transfer`
 
-Transfers funds between user and sub-account wallet. User can specify the source and target wallet to transfer funds
-
-, `Wallet` permission is required. To get supported currency list please check [Available currency list for action](#query-available-currency-list-for-wallet-action)
+Transfers funds between user and sub-account wallet. User can specify the source and target wallet to transfer funds,
+`Wallet` permission is required. To get supported currency list please check [Available currency list for action](#query-available-currency-list-for-wallet-action).
 
 ### Request Parameters
 
@@ -2932,7 +3139,7 @@ To subscribe to a websocket public trade fill
 }
 ```
 
-Subscribe to recent trade feed for a market. The topic will be `tradeHistoryApi:<market>` where `<market>` is the market symbol.
+Subscribe to recent trade feed for a market. The topic will be `tradeHistoryApiV2:<market>` where `<market>` is the market symbol.
 
 ### Response Content
 
@@ -3018,7 +3225,7 @@ echo -n "/ws/futures1624985375123"  | openssl dgst -sha384 -hmac "848db84ac252b6
   "topic": "notificationApiV3",
   "data": [
     {
-      "symbol": "Market Symbol (eg. BTC-PERP)",
+      "symbol": "Market Symbol (eg. BTC-PERP, for topic 'notificationApiV2' will be BTCPFC)",
       "orderID": "BTSE internal order ID",
       "side": "BUY",
       "type": "76",
@@ -3045,7 +3252,8 @@ echo -n "/ws/futures1624985375123"  | openssl dgst -sha384 -hmac "848db84ac252b6
 
 ```
 
-Receive trade notifications by subscribing to the topic `notificationApiV2`. The websocket feed will push trade level notifications to the subscriber. If topic is subscribed without being authenticated, no messages will be sent.
+To receive trade notifications, subscribe to the `notificationApiV2` or `notificationApiV3` topics. It is recommended to use `notificationApiV3`, which provides market symbols in a more intuitive format, such as BTC-PERP. The WebSocket feed will push real-time, trade-level notifications to authenticated subscribers.
+Please note, if the topic is subscribed to without proper authentication, no messages will be delivered.
 
 ### Response Content
 

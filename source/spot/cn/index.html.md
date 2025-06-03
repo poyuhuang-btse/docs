@@ -13,6 +13,22 @@ headingLevel: 2
 
 # 更改日志
 
+## 版本 3.4.15 (2025年4月9日)
+
+* 更新了 [`修改订单`](#d347e421a4) 中请求字段 `type` 的描述。此更改将于2025年5月18日生效。
+
+## 版本 3.4.14 (2024年11月6日)
+
+* 在 API [查询用户交易成交](#a49d12728a) 新增交易历史纪录最大天数说明
+
+## 版本 3.4.13 (2024年10月30日)
+
+* 在 API [`创建新订单`](#8be954be0d)，[`修正订单`](#d347e421a4) 和 [取消订单](#3eedd32d80) 的 [API Enum](#api-enum) 中新增 TIMEOUT 狀態
+
+## 版本 3.4.12 (2024年9月16日)
+
+* 在所有API描述中更新权限相关内容
+
 ## 版本 3.4.11 (2024年8月21日)
 
 * 在[`创建新订单`](#8be954be0d)说明指数订单仅支持 USD 报价。
@@ -282,6 +298,7 @@ BTSE的速率限制如下:
 
 在连接BTSE API时，您将遇到代表BTSE中不同状态或状态类型的数字代码。以下部分提供了您可能会看到的代码列表。
 
+* -1: TIMEOUT = 请求逾时，请检查订单状态
 * 1: MARKET_UNAVAILABLE = 期货市场不可用
 * 2: ORDER_INSERTED = 订单成功插入
 * 4: ORDER_FULLY_TRANSACTED = 订单完全成交
@@ -353,7 +370,7 @@ BTSE的速率限制如下:
     "quote": "USD",
     "active": true,
     "size": 2117.88522,
-    "minValidPrice": 0.5,
+    "minValidPrice": 0.01,
     "minPriceIncrement": 0.5,
     "minOrderSize": 0.00001,
     "maxOrderSize": 2000,
@@ -841,7 +858,7 @@ BTSE的速率限制如下:
 
 `POST /api/v3.2/order` or `POST /api/v3.2/order/peg` （这两个端点的工作方式相同）
 
-创建新订单。需要具有“交易”权限。请注意，指数订单仅支持 USD 报价。
+创建新订单。需要具有`交易`权限。请注意，指数订单仅支持 USD 报价。
 
 ### 请求参数
 
@@ -893,7 +910,8 @@ BTSE的速率限制如下:
 
 `GET /api/v3.2/order`
 
-查询指定orderID/clOrderID的订单详情，请注意已取消的订单仅保留30分钟。需要`交易`权限。
+查询指定 orderID/clOrderID 的订单详情，仅适用于未结订单及取消时间在30分钟内的已取消订单。
+请注意，该 API 需要具备`交易`权限。
 
 > 响应
 
@@ -1047,7 +1065,7 @@ BTSE的速率限制如下:
 
 `PUT /api/v3.2/order`
 
-修改订单的价格、大小或触发价格。对于触发订单，如果订单已经被触发，触发价格将无法进一步修改。修改订单_不适用于_算法订单。
+修改订单的价格、大小或触发价格。对于触发订单，如果订单已经被触发，触发价格将无法进一步修改。修改订单_不适用于_算法订单。需要`交易`权限。
 
 ### 请求参数
 
@@ -1056,11 +1074,11 @@ BTSE的速率限制如下:
 | symbol        | string  | Yes      | 市场标识符                |
 | orderID       | string  | No      | 内部订单ID。当未提供`clOrderID`时必须提供。如果提供了`orderID`，则将忽略`clOrderID`。 |
 | clOrderID     | string  | No      | 自定义订单ID。当未提供`orderID`时必须提供。 |
-| type          | string  | Yes      | 修订类型<br/>`PRICE`: 修订订单价格<br/>`SIZE`: 修订订单大小<br/>`TRIGGERPRICE`: 修订触发价格<br/>`ALL`: 修订多个字段 |
-| value         | double  | No      | 对于类型：`PRICE`、`SIZE`、`TRIGGERPRICE`，是否必须项。要修订的值。值取决于设置的类型。 |
-| orderPrice    | double  | No      | 对于类型：`ALL`，要修订的订单价格。 |
-| orderSize     | double  | No      | 对于类型：`ALL`，要修订的订单大小。 |
-| triggerPrice  | double  | No      | 对于类型：`ALL`，要修订的触发价格。 |
+| type          | string  | Yes      | 修改类型<br/>`PRICE`: 修改订单价格<br/>`SIZE`: 修改订单大小<br/>`TRIGGERPRICE`: 修改触发价格，仅适用于触发单。<br/>`ALL`: 修改多个字段。注意：`TRIGGERPRICE` 仅可在订单为触发单时修改，意味着如果不是触发单，请不要传入`TRIGGERPRICE`。 |
+| value         | double  | No      | 对于类型：`PRICE`、`SIZE`、`TRIGGERPRICE`，是否必须项。要修改的值。值取决于设置的类型。 |
+| orderPrice    | double  | No      | 对于类型：`ALL`，要修改的订单价格。 |
+| orderSize     | double  | No      | 对于类型：`ALL`，要修改的订单大小。 |
+| triggerPrice  | double  | No      | 对于类型：`ALL`，要修改的触发价格。 |
 
 ### 响应内容
 
@@ -1179,7 +1197,7 @@ BTSE的速率限制如下:
 
 `DELETE /api/v3.2/order`
 
-取消尚未成交的挂单。`orderID` 是用于取消特定订单的唯一标识符。`clOrderID` 是交易员发送的自定义标识。通过 `clOrderID` 进行取消时，所有具有相同ID的订单将被取消。如果没有发送 `orderID` 和 `clOrderID`，则将取消当前市场上的所有订单。
+取消尚未成交的挂单。`orderID` 是用于取消特定订单的唯一标识符。`clOrderID` 是交易员发送的自定义标识。通过 `clOrderID` 进行取消时，所有具有相同ID的订单将被取消。如果没有发送 `orderID` 和 `clOrderID`，则将取消当前市场上的所有订单。需要`交易`权限。
 
 ### 请求参数
 
@@ -1225,7 +1243,7 @@ BTSE的速率限制如下:
 
 `POST /api/v3.2/order/cancelAllAfter`
 
-允许交易员发送一个超时值，这是一个订单的生存时间 (TTL) 值。通过发送另一个 `cancelAllAfter` 请求来延长超时时间。如果服务器在超时时间到达之前没有收到另一个请求，所有订单将被取消。
+允许交易员发送一个超时值，这是一个订单的生存时间 (TTL) 值。通过发送另一个 `cancelAllAfter` 请求来延长超时时间。如果服务器在超时时间到达之前没有收到另一个请求，所有订单将被取消。需要`交易`权限。
 
 ### 请求参数
 
@@ -1277,7 +1295,7 @@ BTSE的速率限制如下:
 
 `GET /api/v3.2/user/open_orders`
 
-检索尚未匹配或最近匹配的未完成订单。
+检索尚未匹配或最近匹配的未完成订单。需要`交易`权限。
 
 ### 请求参数
 
@@ -1355,7 +1373,7 @@ BTSE的速率限制如下:
 
 `GET /api/v3.2/user/trade_history`
 
-检索用户的交易历史，包括资金费用数据
+检索用户的交易历史，包括资金费用数据。需要`读取`权限。
 
 ### 请求参数
 
@@ -1368,6 +1386,15 @@ BTSE的速率限制如下:
 | clOrderID     | string  | No      | 使用自定义订单ID查询交易历史                                                           |
 | orderID       | string  | No      | 使用订单ID查询交易历史                                                                 |
 | isMatchSymbol | boolean  | No      | 精确匹配 `symbol`。如果设置为True，只匹配该标的物的记录                                |
+
+* 交易历史纪录最大天数
+
+| 时间区间             | 最大天数     | 说明                                                  |
+| :---:               | ---:        | :---:                                                |
+| startTime / endTime | 7          | 在指定区间中最多**7**天记录，若指定区间超过**7**天，则**开始时间**将设为**结束时间**的前**7**天                            |
+| startTime /    -    | 7           | 未指定**结束时间**, 则从**开始时间**往后**7**天           |
+|      -    / endTime | 7           | 未指定**开始时间**, 则从**结束时间**往前**7**天           |
+|      -    /    -    | 7           | 都未指定时间, 则使用**当前时间**作为**结束时间**往前**7**天 |
 
 ### 响应内容
 
@@ -1409,9 +1436,9 @@ BTSE的速率限制如下:
 }
 ```
 
-`get /api/v3.2/user/fees`
+`GET /api/v3.2/user/fees`
 
-检索用户的交易费用
+检索用户的交易费用。需要`读取`权限。
 
 ### 请求参数
 
@@ -1460,9 +1487,9 @@ BTSE的速率限制如下:
 ]
 ```
 
-`get /api/v3.2/invest/products`
+`GET /api/v3.2/invest/products`
 
-获取所有投资产品
+获取所有投资产品。需要`钱包`权限。
 
 ### 请求参数
 
@@ -1504,9 +1531,9 @@ BTSE的速率限制如下:
 }
 ```
 
-`post /api/v3.2/invest/deposit`
+`POST /api/v3.2/invest/deposit`
 
-存入一项投资
+存入一项投资。需要`钱包`权限。
 
 ### 请求参数
 
@@ -1536,9 +1563,9 @@ BTSE的速率限制如下:
 }
 ```
 
-`post /api/v3.2/invest/renew`
+`POST /api/v3.2/invest/renew`
 
-续投资订单
+续投资订单。需要`钱包`权限。
 
 ### 请求参数
 
@@ -1566,9 +1593,9 @@ BTSE的速率限制如下:
 }
 ```
 
-`post /api/v3.2/invest/redeem`
+`POST /api/v3.2/invest/redeem`
 
-赎回投资订单
+赎回投资订单。需要`钱包`权限。
 
 ### 请求参数
 
@@ -1606,9 +1633,9 @@ BTSE的速率限制如下:
 ]
 ```
 
-`get /api/v3.2/invest/orders`
+`GET /api/v3.2/invest/orders`
 
-查询投资订单
+查询投资订单。需要`钱包`权限。
 
 ### 响应内容
 
@@ -1653,9 +1680,9 @@ BTSE的速率限制如下:
 ]
 ```
 
-`get /api/v3.2/invest/history`
+`GET /api/v3.2/invest/history`
 
-查询投资历史
+查询投资历史。需要`钱包`权限。
 
 ### 响应内容
 
@@ -1681,7 +1708,7 @@ BTSE的速率限制如下:
   * 测试网络
      * `wss://testws.btse.io/ws/oss/spot`
 
-## OSS L1 快照（按分组）
+## OSS L1 快照
 
 > 请求
 
@@ -1689,14 +1716,14 @@ BTSE的速率限制如下:
 {
   "op": "subscribe",
   "args": [
-    "snapshotL1:BTC-USD_0"
+    "snapshotL1:BTC-USD"
   ]
 }
 
 {
   "op": "unsubscribe",
   "args": [
-    "snapshotL1:BTC-USD_0"
+    "snapshotL1:BTC-USD"
   ]
 }
 ```
@@ -1705,7 +1732,7 @@ BTSE的速率限制如下:
 
 ```json
 {
-  "topic": "snapshotL1:BTC-USD_0",
+  "topic": "snapshotL1:BTC-USD",
   "data": {
     "bids": [
       [
@@ -1726,10 +1753,9 @@ BTSE的速率限制如下:
 }
 ```
 
-通过端点 `wss://ws.btse.com/ws/oss/spot` 订阅Level 1订单簿。订阅的格式将为 `symbol_grouping`。
+通过端点 `wss://ws.btse.com/ws/oss/spot` 订阅Level 1订单簿。订阅的格式将为 `symbol`。
 
 * `symbol` 表示市场符号
-* `grouping` 表示分组粒度。有效值为0-8。
 
 ### 响应内容
 
