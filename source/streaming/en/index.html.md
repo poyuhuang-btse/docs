@@ -13,6 +13,10 @@ headingLevel: 2
 
 # Change Log
 
+## Version 1.3 (11th Nov 2025)
+
+* Remove [`quote`](#quote-stream) websocket topic from this section. For more details about this websocket topic, please refer to `WebSocket Streams` under `OTC` session. 
+
 ## Version 1.2 (17th May 2023)
 
 * Add [`Ping/Pong`](#ping-pong) for websocket streams
@@ -67,7 +71,7 @@ You will need to create an API key on the BTSE platform before you can use authe
 ## Streaming OTC
 
 * Fetch market info via `Market Summary` OTC api if needed.
-* Subscribe to `Quote Stream` to get streaming otc quote along with quote ids periodically.
+* Please refer to `OTC` section to subscribe `Quote Stream` to get streaming otc quote along with quote ids periodically.
 * Please refer to `OTC` section for API to accept the quote
   - If users chooses to accept the quote, quote is sent to BTSE (Quote Accepted)
   - If quote is accepted by BTSE, then transaction is completed (Transaction Completed)
@@ -134,89 +138,6 @@ echo -n "/ws/otc1624985375123"  | openssl dgst -sha384 -hmac "848db84ac252b6726e
 
 ## Quote Stream
 
-> Request
-
-```json
-{
-  "op": "quote",
-  "symbol": "BTC-USD",
-  "side": "buy",
-  "clOrderId": "ClientOrder1",
-  "quantity": {
-    "quantity": 1,
-    "currency": "BTC"
-  }
-}
-```
-
-```json
-{
-  "op": "unsubscribe-quote",
-  "symbol": "BTC-USD",
-  "clOrderId": "ClientOrder1",
-  "quantity": {
-    "quantity": 1,
-    "currency": "BTC"
-  }
-}
-```
-
-```json
-{
-  "op": "unsubscribe-quote-all"
-}
-```
-
-
-> Response
-
-```json
-{
-  "topic": "quote",
-  "buyQuoteId": "015f05ba-1d55-46d7-94d9-214229414ae7",
-  "sellQuoteId": "0683a41a-a2ad-467b-99b3-241f3ab0cec4",
-  "clOrderId": null,
-  "buyQuantity": 10,
-  "buyUnitPrice": 47865.580838,
-  "buyTotalAmount": 478655.80838,
-  "sellQuantity": 10,
-  "sellUnitPrice": 47649.40351972,
-  "sellTotalAmount": 476494.0352,
-  "status": null,
-  "reason": null
-}
-
-```
-
-Receive quote streams by subscribing to the `quote` websocket. The websocket topic will constantly push new prices to the subscriber. To accept the quote, indicate the buy or sell quote Id using the `/accept` API.
-
-### Request Parameters
-
-| Name      | Type   | Required | Description                                                                                                             |
-| ---       | ---    | ---      | ---                                                                                                                     |
-| op        | string | Yes      | Operation, in this case it is `quote`, `unsubscribe-quote`, or `unsubscribe-quote-all`                                  |
-| symbol    | string | Yes      | Market symbol, refer to `getMarkets` API                                                                                |
-| side      | string | No       | Quote side, `buy` or `sell`, case sensitive. Both sides will be returned when this field is empty/null                  |
-| clOrderId | string | No       | Client custom order Id                                                                                                  |
-| quantity  | double | Yes      | Order quantity                                                                                                          |
-| currency  | string | Yes      | Can be either in the base or quote currency. If specified in the base currency, then the quote stream will respond with |
-
-### Response Content
-
-| Name            | Type   | Required | Description                                                                                                                                         |
-| ---             | ---    | ---      | ---                                                                                                                                                 |
-| topic           | string | Yes      | Websocket topic                                                                                                                                     |
-| buyQuoteId      | string | No       | Quote Id for the buy side. If the value is empty / null, it means that you websocket stream is not authenticated or you doesn't subscribe this side |
-| sellQuoteId     | string | No       | Quote Id for the sell side. If the value is empty / null, it means that you websocket stream is not authenticated or you doesn't subscribe this side|
-| clOrderId       | string | Yes      | User customer Order Id                                                                                                                              |
-| buyQuantity     | double | No       | Quantity to purchase based on the quote request. If the value is null, it means that you doesn't subscribe this side                                |
-| buyUnitPrice    | double | No       | Unit price per unit of the base symbol. If the value is null, it means that you doesn't subscribe this side                                         |
-| buyTotalAmount  | double | No       | Total price to pay in quote currency. If the value is null, it means that you doesn't subscribe this side                                           |
-| sellQuantity    | double | No       | Quantity to sell based on the quote request. If the value is null, it means that you doesn't subscribe this side                                    |
-| sellUnitPrice   | double | No       | Unit price per unit of the base symbol. If the value is null, it means that you doesn't subscribe this side                                         |
-| sellTotalAmount | double | No       | Total price to pay in quote currency. If the value is null, it means that you doesn't subscribe this side                                           |
-| status          | string | No       | Status of the response. If the value is null, it means that you doesn't subscribe this side                                                         |
-| reason          | string | No       | If an error is returned, the reason field will contain the reasons for the error                                                                    |
-
+For more details about this websocket topic, please refer to `WebSocket Streams` under `OTC` session.
 
 </section>

@@ -15,6 +15,10 @@ headingLevel: 2
 
 ## 版本 1.2（2023年5月17日）
 
+* 从本节中移除[`报价数据流`](#42034b88ca)。有关此 WebSocket 主题的更多详细信息，请参阅 OTC 章节下的 WebSocket 数据流。
+
+## 版本 1.2（2023年5月17日）
+
 * 添加 [`Ping/Pong`](#ping-pong) 用于 WebSocket 数据流
 
 ## 版本 1.1（2022年3月16日）
@@ -65,7 +69,7 @@ headingLevel: 2
 ## 流式 OTC
 
 * 如果需要，通过 `市场概要` OTC API 获取市场信息。
-* 订阅 `报价数据流` 以定期获取流式的 OTC 报价和报价 ID。
+* 请参阅 `OTC` 章节下的 `报价数据流` 以定期获取流式的 OTC 报价和报价 ID。
 * 请参考 `OTC` 部分以了解接受报价的 API
   - 如果用户选择接受报价，报价将被发送到 BTSE（报价已接受）
   - 如果 BTSE 接受报价，则交易已完成（交易已完成）
@@ -133,89 +137,7 @@ echo -n "/ws/otc1624985375123"  | openssl dgst -sha384 -hmac "848db84ac252b6726e
 
 ## 报价数据流
 
-> 请求
-
-```json
-{
-  "op": "quote",
-  "symbol": "BTC-USD",
-  "side": "buy",
-  "clOrderId": "ClientOrder1",
-  "quantity": {
-    "quantity": 1,
-    "currency": "BTC"
-  }
-}
-```
-
-```json
-{
-  "op": "unsubscribe-quote",
-  "symbol": "BTC-USD",
-  "clOrderId": "ClientOrder1",
-  "quantity": {
-    "quantity": 1,
-    "currency": "BTC"
-  }
-}
-```
-
-```json
-{
-  "op": "unsubscribe-quote-all"
-}
-```
-
-
-> 响应
-
-```json
-{
-  "topic": "quote",
-  "buyQuoteId": "015f05ba-1d55-46d7-94d9-214229414ae7",
-  "sellQuoteId": "0683a41a-a2ad-467b-99b3-241f3ab0cec4",
-  "clOrderId": null,
-  "buyQuantity": 10,
-  "buyUnitPrice": 47865.580838,
-  "buyTotalAmount": 478655.80838,
-  "sellQuantity": 10,
-  "sellUnitPrice": 47649.40351972,
-  "sellTotalAmount": 476494.0352,
-  "status": null,
-  "reason": null
-}
-
-```
-
-通过订阅 `quote` WebSocket，接收报价数据流。WebSocket 主题将不断向订阅者推送新价格。要接受报价，请使用 `/accept` API 指示买入或卖出报价 ID。
-
-### 请求参数
-
-| 名称      | 类型   | 是否必须     | 描述                                                                                   |
-| ---       | ---    | ---      | ---                                                                                   |
-| op        | string | Yes       | 操作，此处为 `quote`、`unsubscribe-quote` 或 `unsubscribe-quote-all`                  |
-| symbol    | string | Yes       | 市场标志，参考 `getMarkets` API                                                        |
-| side      | string | No       | 报价方向，`buy` 或 `sell`，区分大小写。如果此字段为空/为null，则将返回两个方向的报价  |
-| clOrderId | string | No       | 客户自定义订单 ID                                                                     |
-| quantity  | double | Yes       | 订单数量                                                                             |
-| currency  | string | Yes       | 可以是基础货币或报价货币。如果指定基础货币，那么报价流将以响应形式返回 |
-
-### 响应内容
-
-| 名称            | 类型   | 是否必须     | 描述                                                                                             |
-| ---             | ---    | ---      | ---                                                                                             |
-| topic           | string | Yes       | WebSocket 主题                                                                                  |
-| buyQuoteId      | string | No       | 买方的报价 ID。如果该值为空/为null，则表示您的 WebSocket 流未经身份验证或您未订阅此方向  |
-| sellQuoteId     | string | No       | 卖方的报价 ID。如果该值为空/为null，则表示您的 WebSocket 流未经身份验证或您未订阅此方向 |
-| clOrderId       | string | Yes       | 用户自定义订单 ID                                                                               |
-| buyQuantity     | double | No       | 基于报价请求的购买数量。如果该值为null，则表示您未订阅此方向                          |
-| buyUnitPrice    | double | No       | 基础符号每单位的单价。如果该值为null，则表示您未订阅此方向                         |
-| buyTotalAmount  | double | No       | 以报价货币支付的总价格。如果该值为null，则表示您未订阅此方向                      |
-| sellQuantity    | double | No       | 基于报价请求的销售数量。如果该值为null，则表示您未订阅此方向                      |
-| sellUnitPrice   | double | No       | 基础符号每单位的单价。如果该值为null，则表示您未订阅此方向                     |
-| sellTotalAmount | double | No       | 以报价货币支付的总价格。如果该值为null，则表示您未订阅此方向                   |
-| status          | string | No       | 响应状态。如果该值为null，则表示您未订阅此方向                                  |
-| reason          | string | No       | 如果返回错误，reason 字段将包含错误的原因                                      |
+有关此 WebSocket 主题的更多详细信息，请参阅 OTC 章节下的 WebSocket 数据流。
 
 
 </section>

@@ -13,10 +13,10 @@ headingLevel: 2
 
 # Change Log
 
-## Version 3.4.16 (22th September 2025)
+## Version 1.0.1 (22th September 2025)
 
 * In the API [Create new order](#create-new-order)
-, a new request field triggerPriceType has been added. For the following order types, users can now specify whether the trigger price is based on `INDEX_PRICE` or LAST_PRICE (default: `INDEX_PRICE`):
+, a new request field triggerPriceType has been added. For the following order types, users can now specify whether the trigger price is based on `INDEX_PRICE` or `LAST_PRICE` (default: `INDEX_PRICE`):
   * Stop Limit
   * Stop Market
   * Take Profit Limit
@@ -26,198 +26,62 @@ headingLevel: 2
 
 This change will take effect on September 24, 2025.
 
-## Version 3.4.15 (9th April 2025)
+## Version 1.0.0 (10th July 2025)
 
-* Update the description for Request field `type` for [Amend order](#amend-order). This change will take effect on 18th May, 2025.
-
-## Version 3.4.14 (6th November 2024)
-
-* Add maximum days of trade history explanation for API [Query User Trades Fills](#query-user-trades-fills)
-
-## Version 3.4.13 (30th October 2024)
-
-* Add TIMEOUT status in [API Enum](#api-enum) for APIs [Create new order](#create-new-order), [Amend order](#amend-order), and [Cancel order](#cancel-order)
-
-## Version 3.4.12 (16th September 2024)
-
-* Update the permission-related content in the description of all APIs
-
-## Version 3.4.11 (21st Aug 2024)
-
-* Description of the Index Order only supports USD quotes. [Create new order](#create-new-order)
-
-## Version 3.4.10 (10th Jul 2024)
-
-* Add [`Rate Limit Mechanism Description`](#mechanism-description) description
-
-## Version 3.4.9 (29th March 2024)
-
-* Description of the maximum Double of days for querying historical records. [Query Trades Fills](#query-trades-fills)
-
-## Version 3.4.8 (25th October 2023)
-
-* Add an new API [Query Order](#query-order)
-
-## Version 3.4.7 (20th October 2023)
-
-* Add two new response field `isMarketOpenToOtc`, `isMarketOpenToSpot` in [Market Summary](#market-summary)
-
-## Version 3.4.6 (18th Sep 2023)
-
-* Correct the data types of parameters in order related APIs and remove 451 status code
-
-## Version 3.4.5 (3rd September 2023)
-* Remove the slide parameter from [`amend-order`](#amend-order)
-
-## Version 3.4.4 (29th Aug 2023)
-
-* Add 451 status code in [`API Status Codes`](#api-status-codes) and make [`Order Book Websocket Streams`](#order-book-websocket-streams) as independent paragraph
-
-## Version 3.4.3 (17th Aug 2023)
-* Update [`Notifications`](#notifications) response data format from array to object.
-
-## Version 3.4.2 (29th May 2023)
-* Update the error message format of Orderbook Stream Service(OSS). The scheduled effective date is `June 6, 2023, at 10:00 AM (UTC+0)`.
-  * Before
-    ```
-    {
-        "severity": "ERROR",
-        "error": [
-            {
-                "arg": "update:BTCC-USD_0",
-                "errorCode": "MARKET_PAIR_NOT_SUPPORT"
-            }
-        ]
-    }
-    ```
-  * After
-    ```
-    {
-        "severity": "ERROR",
-        "errors": [
-            {
-                "arg": "update:BTCC-USD_0",
-                "error": {
-                    "code": 1000,
-                    "message": "Market pair provided is currently not supported."
-                }
-            }
-        ]
-    }
-    ```
-
-## Version 3.4.1 (17th May 2023)
-
-* Add [`Ping/Pong`](#ping-pong) for websocket streams
-
-## Version 3.4.0 (12th April 2023)
-* Deprecated two websocket topics `Orderbook Snapshot (By grouping)` and `Orderbook Snapshot (By depth)` today.
-Please use the following websocket topic through the endpoint `wss://ws.btse.com/ws/oss/spot` to get orderbook data
-  - [Orderbook Incremental Updates](#orderbook-incremental-updates)
-  - [OSS L1 Snapshot (By grouping)](#oss-l1-snapshot-by-grouping)
-
-## Version 3.3.9 (6th April 2023)
-
-* Add [OSS L1 Snapshot (By grouping)](#oss-l1-snapshot-by-grouping)
-
-## Version 3.3.8 (29th March 2023)
-
-* Update the http status code for authentication failed to `401`
-
-## Version 3.3.7 (1th March 2023)
-
-* update the format of args for [Orderbook incremental update](#orderbook-incremental-updates).
-
-## Version 3.3.6 (7th February 2023)
-
-* Update `symbol` parameter as optional in `open_orders`
-* Add funding fee data in [Query User Trades Fills](#query-user-trades-fills).
-
-## Version 3.3.5 (28th November 2022)
-
-* Add [Orderbook incremental update](#orderbook-incremental-updates) error messages.
-
-## Version 3.3.4 (2nd September 2022)
-
-* Remove unnecessary parameter `includeOld` in [Query Trades Fills](#query-trades-fills) and [Query User’s Trades Fills](https://btsecom.github.io/docs/spot/en/#query-trades-fills-2)
-* Remove inaccurate parameters `beforeSerialId` and `afterSerialId` in [Query Trades Fills](#query-trades-fills) and [Query User’s Trades Fills](https://btsecom.github.io/docs/spot/en/#query-trades-fills-2)
-
-## Version 3.3.3 (15th August 2022)
-
-* Merge document section `Create new algo order` into [Create new order](#create-new-order)
-* Add more request / response samples in [Trade Endpoints](#trade-endpoints)
-* Correct document for request `type` of `TRIGGER` to `TRIGGERPRICE` in [Amend Order](#amend-order)
-
-## Version 3.3.2 (29th March 2022)
-
-* Add new `HALFMIN` time_in_force option in [Create new order](#create-new-order)
-
-## Version 3.3.1 (2nd March 2022)
-
-* Remove unnecessary field `reduceOnly` in [Create new order](#create-new-order)
-
-## Version 3.3.0 (21st January 2022)
-
-* Add new two new response fields `remainingSize` and `originalSize` in [Create new order](#create-new-order) and [Create new algo order](#create-new-algo-order) **[NOTE]: This change will be effective on Jan 25th 2022 (UTC+0)*
-
-## Version 3.2.9 (13th January 2022)
-
-* Migrate wallet-related endpoints to `Wallet` section
-* Migrate wallet-investment endpoints to `Earn` section
-
-## Version 3.2.8 (8th December 2021)
-
-## Version 3.2.7 (23rd November 2021)
-
-* Update orderbook incremental updates description [Orderbook websocket feed](#orderbook-incremental-updates)
-
-## Version 3.2.6 (19th November 2021)
-
-* Addition of `isMatchSymbol` parameter to [trade_history](https://btsecom.github.io/docs/spot/en/#query-trades-fills-2)
-
-## Version 3.2.5 (25th October 2021)
-
-* Addition of orderbook incremental updates [Orderbook websocket feed](#orderbook-incremental-updates)
-
-## Version 3.2.4 (1st July 2021)
-
-* Addition of `fills` websocket topic to subscribe to [user trade fills](#user-trade-fills)
-* Addition of attribute `depth` for [Orderbook websocket feed](#orderbook-snapshot-by-depth)
-
-## Version 3.2.3 (2nd June 2021)
-
-* Introduction of new notification topic. Refer to `notificationsApiV2` for details.
-
-## Version 3.2.2 (29th January 2021)
-
-* Websockets endpoint will be updated to the following:
-  * Spot: wss://ws.btse.com/ws/spot
-  * Futures: wss://ws.btse.com/ws/futures
-
-  Existing endpoints will continue to be made available.
-
-* Login topic will now respond with a JSON success / failure message {"event":"login","success":true}
-* When subscribing or unsubscribing to websocket topics, an acknowledgement will return indicating which topics are successfully subscribed / unsubscribed. Unsuccessful topics will not be returned in the response.
-* Websocket notifications will have in addition the following indicators:
-  * maker - Boolean indicating if an order is a maker / taker order
-  * remainingSize - Value indicating the remaining size on the order
-  * time_in_force - Value indicating the time in force set on the order
-
-## Version 3.2.1 (28th September 2020)
-
-* New Amend Order API. Allows users to edit price, size and trigger prices for pending orders
-
-## Version 3.2 (23rd June 2020)
-
-* Deprecated v1 API
-* Removed fees field for public API /api/v3.1/trades (not needed)
-* Added new wallet APIs to create address, get wallet addresses and withdrawals
-* Enhanced /user/wallet_historyAPI to return wallet details
-* Introduction of API permissions. All current API keys will have Read, Trading and Transfer permissions. Refer to the tags beside the titles to see which category they are classified under
-* Fixed incorrect messages returned on some APIs
-
+* Release V3.3 API. This change will take effect on 16th July, 2025.
 
 # Overview
+
+## Migration from v3.2 to v3.3
+
+We are updating several order-related API endpoints to improve consistency and clarity in size-related fields. Please review the following changes carefully, as some existing fields will be deprecated and replaced with new ones.
+
+### Updated Fields for Order Actions 
+
+For the following endpoints, the fields `size`, `fillSize`, `originalSize` and `remainingSize` will be deprecated and replaced with the following:
+
+  * `originalOrderBaseSize`
+  * `originalOrderQuoteSize`
+  * `currentOrderBaseSize`
+  * `currentOrderQuoteSize`
+  * `remainingOrderBaseSize`
+  * `remainingOrderQuoteSize`
+  * `filledBaseSize`
+  * `totalFilledBaseSize`
+  * `orderCurrency` ("base" or "quote")
+
+**Affected Endpoints**
+
+  * [`Create New Order`](#create-new-order)
+    * Both `POST /api/v3.3/order` and `POST /api/v3.3/order/peg`
+  * [`Amend Order`](#amend-order)
+  * [`Cancel Order`](#cancel-order)
+
+### Updated Fields for Order Query Endpoints 
+
+To improve data structure clarity and consistency, the following legacy fields will be deprecated:
+
+  * `size`
+  * `filledSize`
+  * `remainingSize` 
+  * In some endpoints: `fillSize` as well
+
+They will be replaced with the following enhanced fields:
+
+  * `originalOrderBaseSize`
+  * `originalOrderQuoteSize`
+  * `currentOrderBaseSize`
+  * `currentOrderQuoteSize`
+  * `remainingOrderBaseSize`
+  * `remainingOrderQuoteSize`
+  * `totalFilledBaseSize`
+  * `orderCurrency` ("base" or "quote")
+
+**Affected Endpoints**
+
+  * [`Query Order`](#query-order) - Replacing `size`, `filledSize`, `remainingSize` 
+  * [`Query Open Orders`](#query-open-orders) - Replacing `size`, `fillSize`, `filledSize`, `remainingSize` 
+
 
 ## Generating API Key
 
@@ -262,18 +126,18 @@ You will need to create an API key on the BTSE platform before you can use authe
 > **HMAC SHA384 Signature**
 
 ```shell
-$ echo -n "/api/v3.2/order1624985375123{\"postOnly\":false,\"price\":8500.0,\"side\":\"BUY\",\"size\":0.002,\"stopPrice\":0.0,\"symbol\":\"BTC-USD\",\"time_in_force\":\"GTC\",\"trailValue\":0.0,\"triggerPrice\":0.0,\"txType\":\"LIMIT\",\"type\":\"LIMIT\"}" | openssl dgst -sha384 -hmac "848db84ac252b6726e5f6e7a711d9c96d9fd77d020151b45839a5b59c37203bx"
+$ echo -n "/api/v3.3/order1624985375123{\"postOnly\":false,\"price\":8500.0,\"side\":\"BUY\",\"size\":0.002,\"stopPrice\":0.0,\"symbol\":\"BTC-USD\",\"time_in_force\":\"GTC\",\"trailValue\":0.0,\"triggerPrice\":0.0,\"txType\":\"LIMIT\",\"type\":\"LIMIT\"}" | openssl dgst -sha384 -hmac "848db84ac252b6726e5f6e7a711d9c96d9fd77d020151b45839a5b59c37203bx"
 (stdin)=e9cd0babdf497b536d1e48bc9cf1fadad3426b36406b5747d77ae4e3cdc9ab556863f2d0cf78e0228c39a064ad43afb7
 ```
 
-* Endpoint to place an order is `https://api.btse.com/spot/api/v3.2/order`
+* Endpoint to place an order is `https://api.btse.com/spot/api/v3.3/order`
 * Assume we have the values as follows:
   * request-nonce: `1624985375123`
   * request-api: `4e9536c79f0fdd72bf04f2430982d3f61d9d76c996f0175bbba470d69d59816x`
   * secret: `848db84ac252b6726e5f6e7a711d9c96d9fd77d020151b45839a5b59c37203bx`
-  * Path: `/api/v3.2/order`
+  * Path: `/api/v3.3/order`
   * Body: `{"postOnly":false,"price":8500.0,"side":"BUY","size":0.002,"stopPrice":0.0,"symbol":"BTC-USD","time_in_force":"GTC","trailValue":0.0,"triggerPrice":0.0,"txType":"LIMIT","type":"LIMIT"}`
-  * Encrypted Text: `/api/v3.2/order1624985375123{"postOnly":false,"price":8500.0,"side":"BUY","size":0.002,"stopPrice":0.0,"symbol":"BTC-USD","time_in_force":"GTC","trailValue":0.0,"triggerPrice":0.0,"txType":"LIMIT","type":"LIMIT"}`
+  * Encrypted Text: `/api/v3.3/order1624985375123{"postOnly":false,"price":8500.0,"side":"BUY","size":0.002,"stopPrice":0.0,"symbol":"BTC-USD","time_in_force":"GTC","trailValue":0.0,"triggerPrice":0.0,"txType":"LIMIT","type":"LIMIT"}`
 * Generated signature will be:
   * request-sign: `e9cd0babdf497b536d1e48bc9cf1fadad3426b36406b5747d77ae4e3cdc9ab556863f2d0cf78e0228c39a064ad43afb7`
 
@@ -423,13 +287,13 @@ When connecting up the BTSE API, you will come across Double codes that represen
 ]
 ```
 
-`GET /api/v3.2/market_summary`
+`GET /api/v3.3/market_summary`
 
 Gets market summary information. If no symbol parameter is sent, then all markets will be retrieved.
 
 ### Request Parameters
 
-| name     | type     | required   | description     |
+| Name     | Type     | Required   | Description     |
 | -------- | -------- | ---------- | --------------- |
 | symbol   | String   | no         | market symbol   |
 
@@ -498,13 +362,13 @@ Gets market summary information. If no symbol parameter is sent, then all market
 ]
 ```
 
-`GET /api/v3.2/ohlcv`
+`GET /api/v3.3/ohlcv`
 
 Gets candle stick charting data. Default of 300 data points will be returned at any one time.
 
 ### Request Parameters
 
-| name       | type   | required | description                                                                                                                         |
+| Name       | Type   | Required | Description                                                                                                                         |
 | ---        | ---    | ---      | ---                                                                                                                                 |
 | symbol     | String | yes      | market symbol                                                                                                                       |
 | start      | Long   | no       | starting time in milliseconds (eg. 1624987283000)                                                                                   |
@@ -541,7 +405,7 @@ Returns a 2D array with the indexes described in the table below
 ]
 ```
 
-`GET /api/v3.2/price`
+`GET /api/v3.3/price`
 
 Retrieve current prices on the platform. If no symbol specified, all symbols will be returned.
 
@@ -584,7 +448,7 @@ Retrieve current prices on the platform. If no symbol specified, all symbols wil
 }
 ```
 
-`GET /api/v3.2/orderbook`
+`GET /api/v3.3/orderbook`
 
 Retrieves a Level 2 snapshot of the orderbook and allows you to specify grouping and also bid / asks depth
 
@@ -639,7 +503,7 @@ Retrieves a Level 2 snapshot of the orderbook and allows you to specify grouping
 }
 ```
 
-`GET /api/v3.2/orderbook/L2`
+`GET /api/v3.3/orderbook/L2`
 
 Retrieves a Level 2 snapshot of the orderbook
 
@@ -686,7 +550,7 @@ Retrieves a Level 2 snapshot of the orderbook
 ]
 ```
 
-`GET /api/v3.2/trades`
+`GET /api/v3.3/trades`
 
 Get trade fills for the market specified by `symbol`
 
@@ -731,7 +595,7 @@ Get trade fills for the market specified by `symbol`
 }
 ```
 
-`GET /api/v3.2/time`
+`GET /api/v3.3/time`
 
 Gets server time
 
@@ -752,7 +616,7 @@ Gets server time
 ```json
 {
   "symbol": "BTC-USD",
-  "size": 1,
+  "size": 10,
   "side": "BUY",
   "type": "MARKET"
 }
@@ -763,7 +627,7 @@ Gets server time
 ```json
 {
   "symbol": "BTC-USD",
-  "size": 1,
+  "size": 10,
   "side": "BUY",
   "type": "MARKET",
   "txType": "Stop",
@@ -776,7 +640,7 @@ Gets server time
 ```json
 {
   "symbol": "BTC-USD",
-  "size": 1,
+  "size": 10,
   "price": 34000,
   "side": "BUY",
   "type": "LIMIT"
@@ -788,7 +652,7 @@ Gets server time
 ```json
 {
   "symbol": "BTC-USD",
-  "size": 1,
+  "size": 10,
   "price": 34000,
   "side": "BUY",
   "type": "LIMIT",
@@ -802,7 +666,7 @@ Gets server time
 ```json
 {
   "symbol": "BTC-USD",
-  "size": 1,
+  "size": 10,
   "price": 24000,
   "side": "BUY",
   "type": "OCO",
@@ -817,7 +681,7 @@ Gets server time
 ```json
 {
   "symbol": "BTC-USD",
-  "size": 1,
+  "size": 10,
   "price": 25000,
   "side": "BUY",
   "type": "PEG",
@@ -831,26 +695,68 @@ Gets server time
 ```json
 [
   {
-    "status": 2,
+    "status": 4,
     "symbol": "BTC-USD",
-    "orderType": 80,
-    "price": 22062.5,
+    "orderType": 77,
+    "price": 111370.40932,
     "side": "BUY",
-    "size": 1.0,
-    "orderID": "990db9b6-2ed4-4c68-b46e-827c88cc3884",
-    "timestamp": 1660208800123,
-    "triggerPrice": 0.0,
+    "orderID": "c7884abe-21e6-4728-9825-157298cad88f",
+    "timestamp": 1752129037800,
+    "triggerPrice": 0,
     "stopPrice": null,
     "trigger": false,
     "message": "",
-    "averageFillPrice": 0.0,
-    "fillSize": 0.0,
     "clOrderID": null,
-    "stealth": 0.1,
-    "deviation": -0.1,
+    "stealth": 1,
+    "deviation": 1,
     "postOnly": false,
-    "originalSize": 1.0,
-    "remainingSize": 1.0,
+    "orderDetailType": null,
+    "originalOrderBaseSize": 0.0001,
+    "originalOrderQuoteSize": null,
+    "currentOrderBaseSize": 0.0001,
+    "currentOrderQuoteSize": null,
+    "remainingOrderBaseSize": 0,
+    "remainingOrderQuoteSize": null,
+    "filledBaseSize": 0.0001,
+    "totalFilledBaseSize": 0.0001,
+    "orderCurrency": "base",
+    "avgFilledPrice": 111370.40932,
+    "time_in_force": "GTC"
+  }
+]
+```
+
+> Response (for `Quote Buy`)
+
+```json
+[
+  {
+    "status": 5,
+    "symbol": "BTC-USD",
+    "orderType": 77,
+    "price": 111381.34601685,
+    "side": "BUY",
+    "orderID": "f4aa8d57-c062-4ba9-b22e-09c4249d53f5",
+    "timestamp": 1752129085233,
+    "triggerPrice": 0,
+    "stopPrice": null,
+    "trigger": false,
+    "message": "",
+    "clOrderID": null,
+    "stealth": 1,
+    "deviation": 1,
+    "postOnly": false,
+    "orderDetailType": null,
+    "originalOrderBaseSize": null,
+    "originalOrderQuoteSize": 100,
+    "currentOrderBaseSize": null,
+    "currentOrderQuoteSize": 100,
+    "remainingOrderBaseSize": null,
+    "remainingOrderQuoteSize": 0.870602045,
+    "filledBaseSize": 0.00089,
+    "totalFilledBaseSize": 0.00089,
+    "orderCurrency": "quote",
+    "avgFilledPrice": 111381.34601685,
     "time_in_force": "GTC"
   }
 ]
@@ -860,56 +766,68 @@ Gets server time
 
 ```json
 [
-    {
-        "status": 2,
-        "symbol": "BTC-USD",
-        "orderType": 76,
-        "price": 24000.0,
-        "side": "BUY",
-        "size": 1.0,
-        "orderID": "2b672b4b-77c1-4abf-ba30-df3e82a147b0",
-        "timestamp": 1660211562864,
-        "triggerPrice": 0.0,
-        "stopPrice": null,
-        "trigger": false,
-        "message": "",
-        "averageFillPrice": 0.0,
-        "fillSize": 0.0,
-        "clOrderID": null,
-        "stealth": 1.0,
-        "deviation": 1.0,
-        "postOnly": false,
-        "originalSize": 1.0,
-        "remainingSize": 1.0,
-        "time_in_force": "GTC"
-    },
-    {
-        "status": 9,
-        "symbol": "BTC-USD",
-        "orderType": 76,
-        "price": 40010.0,
-        "side": "BUY",
-        "size": 1.0,
-        "orderID": "7ccf5398-fddd-4d07-a89c-a4f2e72b64ce",
-        "timestamp": 1660211562864,
-        "triggerPrice": 40000.0,
-        "stopPrice": null,
-        "trigger": true,
-        "message": "",
-        "averageFillPrice": 0.0,
-        "fillSize": 0.0,
-        "clOrderID": null,
-        "stealth": 1.0,
-        "deviation": 1.0,
-        "postOnly": false,
-        "originalSize": 1.0,
-        "remainingSize": 0.0,
-        "time_in_force": "GTC"
-    }
+  {
+    "status": 2,
+    "symbol": "BTC-USDT",
+    "orderType": 76,
+    "price": 110000,
+    "side": "BUY",
+    "orderID": "54b3ab22-132b-4df0-9378-beacdc808e5c",
+    "timestamp": 1752129347246,
+    "triggerPrice": 0,
+    "stopPrice": null,
+    "trigger": false,
+    "message": "",
+    "clOrderID": "_W_mcjffli1752129293688",
+    "stealth": 1,
+    "deviation": 1,
+    "postOnly": false,
+    "orderDetailType": null,
+    "originalOrderBaseSize": 0.0001,
+    "originalOrderQuoteSize": null,
+    "currentOrderBaseSize": 0.0001,
+    "currentOrderQuoteSize": null,
+    "remainingOrderBaseSize": 0.0001,
+    "remainingOrderQuoteSize": null,
+    "filledBaseSize": 0,
+    "totalFilledBaseSize": 0,
+    "orderCurrency": "base",
+    "avgFilledPrice": 0,
+    "time_in_force": "GTC"
+  },
+  {
+    "status": 9,
+    "symbol": "BTC-USDT",
+    "orderType": 76,
+    "price": 111318.3,
+    "side": "BUY",
+    "orderID": "fae47714-4c75-4956-9e6a-832cbf2d9a09",
+    "timestamp": 1752129347246,
+    "triggerPrice": 120000,
+    "stopPrice": null,
+    "trigger": true,
+    "message": "",
+    "clOrderID": "_W_mcjffli1752129293688",
+    "stealth": 1,
+    "deviation": 1,
+    "postOnly": false,
+    "orderDetailType": null,
+    "originalOrderBaseSize": 0.0001,
+    "originalOrderQuoteSize": null,
+    "currentOrderBaseSize": 0.0001,
+    "currentOrderQuoteSize": null,
+    "remainingOrderBaseSize": 0,
+    "remainingOrderQuoteSize": null,
+    "filledBaseSize": 0,
+    "totalFilledBaseSize": 0,
+    "orderCurrency": "base",
+    "avgFilledPrice": 0,
+    "time_in_force": "GTC"
+  }
 ]
 ```
 
-`POST /api/v3.2/order` or `POST /api/v3.2/order/peg` (The 2 endpoints work identically)
+`POST /api/v3.3/order` or `POST /api/v3.3/order/peg` (The 2 endpoints work identically)
 
 Creates a new order. Requires `Trading` permission. Please note that Index Order only supports USD quotes.
 
@@ -920,7 +838,7 @@ Creates a new order. Requires `Trading` permission. Please note that Index Order
 | symbol        | String  | Yes      | Market symbol                                                                                                                                                                                                                                                                                                                                                      |
 | price         | Double  | No       | Mandatory unless creating a MARKET order. Minimum price for a sell order, this is the lowest price that a user is willing to sell at. Maximum price for a buy order, this is the maximum price a user is willing to buy at.                                                                                                                                        |
 | size          | Double  | Yes      | Order size                                                                                                                                                                                                                                                                                                                                                         |
-| side          | String  | Yes      | 'BUY' or 'SELL'                                                                                                                                                                                                                                                                                                                                                    |
+| side          | String  | Yes      | Trade side. Values are: [`BUY`, `SELL`]                                                                                                                                                                                                                                                                                                                                                    |
 | time_in_force | String  | No       | Time validity of the order<br/>GTC: Good till Cancel<br/>IOC: Immediate or Cancel<br/>FOK: Fill or Kill<br/>HALFMIN: Order valid for 30 seconds<br/>FIVEMIN: Order valid for 5 mins<br/> HOUR: Order valid for an hour<br/>TWELVEHOUR: Order valid for 12 hours<br/>DAY: Order valid for a day<br/>WEEK: Order valid for a week<br/>MONTH: Order valid for a month |
 | type          | String  | Yes      | Order type<br/>LIMIT: Limit Orders<br/>MARKET: Market Orders<br/>OCO: One cancel the other<br/>PEG: price is according to a deviation to the Index price                                                                                                                                                                                                           |
 | txType        | String  | No       | Used for Stop orders or trigger orders<br/>STOP: Stop Order, `triggerPrice` is mandatory<br/>TRIGGER: Trigger order, `triggerPrice` is mandatory<br/>LIMIT: Default, used when its not a Stop order nor Trigger order                                                                                                                                                 |
@@ -934,32 +852,36 @@ Creates a new order. Requires `Trading` permission. Please note that Index Order
 | triggerPriceType     | String  | No      | For the following order types, users can specify whether the trigger price is based on `INDEX_PRICE` or `LAST_PRICE` (default: `INDEX_PRICE`):<br/>Stop Limit<br/>Stop Market<br/>Take Profit Limit<br/>Take Profit Market<br/>Trailing Stop Market<br/>OCO (One Cancels the Other)<br/> |
 
 
-
 ### Response Content
 
 | Name             | Type    | Required | Description                                                                                                                                                                                                                                                                                         |
 | ---              | ---     | ---      | ---                                                                                                                                                                                                                                                                                                 |
 | symbol           | String  | Yes      | Market symbol                                                                                                                                                                                                                                                                                       |
 | clOrderID        | String  | Yes      | Customer tag sent in by trader                                                                                                                                                                                                                                                                      |
-| fillSize         | Double  | Yes      | Trade filled size                                                                                                                                                                                                                                                                                   |
 | orderID          | String  | Yes      | Order ID                                                                                                                                                                                                                                                                                            |
 | orderType        | Integer  | Yes      | Order type <br/>76: Limit order<br/>77: Market order<br/>80: Peg/Algo order                                                                                                                                                                                                                         |
 | postOnly         | Boolean | Yes      | Indicates if order is a post only order                                                                                                                                                                                                                                                             |
 | price            | Double  | Yes      | Order price                                                                                                                                                                                                                                                                                         |
-| side             | String  | Yes      | Order side<br/>BUY or SELL                                                                                                                                                                                                                                                                          |
-| size             | Double  | Yes      | Order size                                                                                                                                                                                                                                                                                          |
+| side             | String  | Yes      | Trade side. Values are: [`BUY`, `SELL`]                                                                                                                                                                                                                                                                          |
 | status           | Integer | Yes      | Order status<br/>	2: Order Inserted<br/>4: Order Fully Transacted<br/>5: Order Partially Transacted<br/>6: Order Cancelled<br/>7: Order Refunded<br/>8: Insufficient Balance<br/>9: Trigger Inserted<br>10: Trigger Activated<br/>15: Order Rejected<br/>16: Order Not Found<br/>17: Request Failed |
 | stopPrice        | Double  | Yes      | Stop price                                                                                                                                                                                                                                                                                          |
 | time_in_force    | String  | Yes      | Order validity                                                                                                                                                                                                                                                                                      |
 | timestamp        | Long  | Yes      | Order timestamp                                                                                                                                                                                                                                                                                     |
 | trigger          | Boolean  | Yes      | Indicator if order is a trigger order                                                                                                                                                                                                                                                               |
 | triggerPrice     | Double  | Yes      | Order trigger price, returns 0 if order is not a trigger order                                                                                                                                                                                                                                      |
-| averageFillPrice | Double  | Yes      | Average filled price. Returns the average filled price for partially transacted orders                                                                                                                                                                                                              |
+| avgFilledPrice | Double  | Yes      | Average filled price. Returns the average filled price for partially transacted orders                                                                                                                                                                                                              |
 | message          | String  | Yes      | Trade messages                                                                                                                                                                                                                                                                                      |
 | stealth          | Double  | Yes      | Stealth value of order                                                                                                                                                                                                                                                                              |
 | deviation        | Double  | Yes      | Deviation value of order                                                                                                                                                                                                                                                                            |
-| remainingSize    | Double  | Yes      | Size left to be transacted                                                                                                                                                                                                                                                                          |
-| originalSize     | Double  | Yes      | Original order size                                                                                                                                                                                                                                                                                 |
+| originalOrderBaseSize                 | Double  | Yes      | The original order quantity in base currency. This value will not change even if adjustments are made later.                                                                           |
+| originalOrderQuoteSize                 | Double  | Yes      | The original order quantity in quote currency. This value will not change even if adjustments are made later.                                                                           |
+| currentOrderBaseSize                 | Double  | Yes      | The latest order quantity in base currency, which means the sum of the filled quantity and the remaining unfilled quantity.                                                                           |
+| currentOrderQuoteSize                 | Double  | Yes      | The latest order quantity in quote currency, which means the sum of the filled quantity and the remaining unfilled quantity.                                                                           |
+| remainingOrderBaseSize                 | Double  | Yes      | The remaining order quantity in base currency = Current Order Base Size - Filled Base Size.                                                                           |
+| remainingOrderQuoteSize                 | Double  | Yes      | The remaining order quantity in quote currency = Current Order Quote Size - Filled Quote Size.                                                                           |
+| filledBaseSize                 | Double  | Yes      | The quantity of the order in base currency that has been filled.                                                                           |
+| totalFilledBaseSize                 | Double  | Yes      | Cumulative filled quantity of this order in base currency.                                                                           |
+| orderCurrency                 | String  | Yes      | "base" or "quote"                                                                           |
 
 ## Query Order
 
@@ -967,37 +889,42 @@ Creates a new order. Requires `Trading` permission. Please note that Index Order
 
 ```json
 {
-  "orderID": "<Order UUID>",
-  "symbol": "BTC-USDT",
-  "quote": "USDT",
-  "status": 6,
+  "orderID": "54b3ab22-132b-4df0-9378-beacdc808e5c",
   "orderType": 76,
-  "price": 30000,
-  "size": 0.00001,
-  "side": "SELL",
-  "orderValue": 0.300102,
-  "trailValue": 0,
-  "filledSize": 0,
-  "remainingSize": 0.00001,
-  "averageFillPrice": 0,
-  "clOrderID": "<Client OrderID>",
-  "timeInForce": "GTC",
-  "timestamp": 1697766317422,
+  "price": 110000,
+  "side": "BUY",
+  "orderValue": 11.004378,
   "pegPriceMin": 0,
   "pegPriceMax": 0,
   "pegPriceDeviation": 0,
+  "timestamp": 1752129347245,
   "triggerOrder": false,
   "triggerPrice": 0,
   "triggerOriginalPrice": 0,
   "triggerOrderType": 0,
   "triggerTrailingStopDeviation": 0,
   "triggerStopPrice": 0,
-  "triggered": false
+  "symbol": "BTC-USDT",
+  "trailValue": 0,
+  "quote": "USDT",
+  "clOrderID": "_W_mcjffli1752129293688",
+  "status": 2,
+  "timeInForce": "GTC",
+  "originalOrderBaseSize": 0.0001,
+  "originalOrderQuoteSize": null,
+  "currentOrderBaseSize": 0.0001,
+  "currentOrderQuoteSize": null,
+  "remainingOrderBaseSize": 0.0001,
+  "remainingOrderQuoteSize": null,
+  "totalFilledBaseSize": 0,
+  "orderCurrency": "base",
+  "avgFilledPrice": 0,
+  "triggered": true
 }
 ```
 
 
-`GET /api/v3.2/order`
+`GET /api/v3.3/order`
 
 Query order detail for a specified orderID/clOrderID, for the open orders and cancelled order which is cancelled in 30 minutes only.
 Please note that this API is `Trading` permission required.
@@ -1017,11 +944,9 @@ Please note that this API is `Trading` permission required.
 | symbol                        | String  | Yes      | Market symbol                                                                          |
 | quote                         | String  | Yes      | Quote symbol                                                                           |
 | orderType                     | Integer | Yes      | Order type                                                                             |
-| side                          | String  | Yes      | Order side                                                                             |
+| side                          | String  | Yes      | Trade side. Values are: [`BUY`, `SELL`]                                                                             |
 | price                         | Double  | Yes      | Order price                                                                            |
-| size                          | Double  | Yes      | Order size                                                                             |
 | orderValue                    | Double  | Yes      | Total value of of this order                                                           |
-| filledSize                    | Double  | Yes      | Filled Size                                                                            |
 | pegPriceMin                   | Double  | Yes      | Minimum possible peg price this takes precedence over pegPriceDeviation                |
 | pegPriceMax                   | Double  | Yes      | Peg Price Max (New Entry)                                                              |
 | pegPriceDeviation             | Double  | Yes      | Percentage deviation from Index price                                                  |
@@ -1029,14 +954,21 @@ Please note that this API is `Trading` permission required.
 | triggerOrder                  | Boolean | Yes      | Indicator if order is a trigger order                                                  |
 | triggerPrice                  | Double  | Yes      | Order trigger price, returns 0 if order is not a trigger order                         |
 | triggerOriginalPrice          | Double  | Yes      | Price of the original order. Only valid if it's a triggered order                      |
-| triggerOrderType              | Integer | Yes      | Order type                                                                             |
+| triggerOrderType              | Integer | Yes      | Order type <br/>`76: Limit order`<br/>`77: Market order`<br/>`80: Peg/Algo order`                                                                             |
 | triggerTrailingStopDeviation  | Double  | Yes      | Percentage deviation from stop price                                                   |
 | triggerStopPrice              | Double  | Yes      | Stop price, Algo Order only                                                            |
 | triggered                     | Boolean | Yes      | Indicate whether the order is triggered                                                |
 | trailValue                    | Double  | Yes      | Trail value                                                                            |
 | clOrderID                     | String  | Yes      | Customer tag sent in by trader                                                         |
-| averageFillPrice              | Double  | Yes      | Average filled price. Returns the average filled price for partially transacted orders |
-| remainingSize                 | Double  | Yes      | remainingSize                                                                          |
+| avgFilledPrice              | Double  | Yes      | Average filled price. Returns the average filled price for partially transacted orders |
+| originalOrderBaseSize                 | Double  | Yes      | The original order quantity in base currency. This value will not change even if adjustments are made later.                                                                           |
+| originalOrderQuoteSize                 | Double  | Yes      | The original order quantity in quote currency. This value will not change even if adjustments are made later.                                                                           |
+| currentOrderBaseSize                 | Double  | Yes      | The latest order quantity in base currency, which means the sum of the filled quantity and the remaining unfilled quantity.                                                                           |
+| currentOrderQuoteSize                 | Double  | Yes      | The latest order quantity in quote currency, which means the sum of the filled quantity and the remaining unfilled quantity.                                                                           |
+| remainingOrderBaseSize                 | Double  | Yes      | The remaining order quantity in base currency = Current Order Base Size - Filled Base Size.                                                                           |
+| remainingOrderQuoteSize                 | Double  | Yes      | The remaining order quantity in quote currency = Current Order Quote Size - Filled Quote Size.                                                                           |
+| totalFilledBaseSize                 | Double  | Yes      | Cumulative filled quantity of this order in base currency.                                                                           |
+| orderCurrency                 | String  | Yes      | "base" or "quote"                                                                           |
 | status                        | Integer | Yes      | Order status. Please refer to [`API Enum`](#api-enum)                                  |
 | timeInForce                   | String  | Yes      | Order validity                                                                         |
 
@@ -1059,7 +991,7 @@ Please note that this API is `Trading` permission required.
 {
   "orderID": "689bf733-4879-4e32-8d1f-cb81f63d24d4",
   "type": "SIZE",
-  "value": 1.05,
+  "value": 10.05,
   "symbol": "BTC-USD"
 }
 ```
@@ -1083,7 +1015,7 @@ Please note that this API is `Trading` permission required.
   "orderID": "cb2785b0-558e-4b30-bf1f-8a8c56174d0c",
   "type": "ALL",
   "orderPrice": 40010,
-  "orderSize": 1.05,
+  "orderSize": 10.05,
   "triggerPrice": 40000
 }
 ```
@@ -1093,32 +1025,39 @@ Please note that this API is `Trading` permission required.
 ```json
 [
   {
-    "status": 15,
-    "symbol": "BTC-null",
-    "orderType": 0,
-    "price": 0.0,
+    "status": 123,
+    "symbol": "BTC-USDT",
+    "orderType": 76,
+    "price": 90000,
     "side": "BUY",
-    "size": 1.0,
-    "orderID": "25248336-66d8-41ff-99fd-83489c4e6029",
-    "timestamp": 1660277763249,
-    "triggerPrice": 0.0,
+    "orderID": "56c03da5-3d7b-4c5c-8b13-1b3de5be2e33",
+    "timestamp": 1752129948157,
+    "triggerPrice": 0,
     "stopPrice": null,
     "trigger": false,
     "message": "",
-    "averageFillPrice": 0.0,
-    "fillSize": 0.0,
-    "clOrderID": "",
-    "stealth": 0.0,
-    "deviation": 0.0,
-    "postOnly": false,
-    "originalSize": 1.0,
-    "remainingSize": 1.0,
+    "clOrderID": "_W_ejrojwq1752129916234",
+    "stealth": 0,
+    "deviation": 0,
+    "postOnly": true,
+    "orderDetailType": null,
+    "originalOrderBaseSize": 0.00001,
+    "originalOrderQuoteSize": null,
+    "currentOrderBaseSize": 0.00001,
+    "currentOrderQuoteSize": null,
+    "remainingOrderBaseSize": 0.00001,
+    "remainingOrderQuoteSize": null,
+    "filledBaseSize": 0,
+    "totalFilledBaseSize": 0,
+    "orderCurrency": "base",
+    "avgFilledPrice": 0,
+    "originalPrice": 90000,
     "time_in_force": "GTC"
   }
 ]
 ```
 
-`PUT /api/v3.2/order`
+`PUT /api/v3.3/order`
 
 Amend the price or size or trigger price of an order. For trigger orders, if the order has already been triggered, the trigger price cannot be further amended. Amend order _does not_ apply to algo orders. Requires `Trading` permission.
 
@@ -1141,23 +1080,30 @@ Amend the price or size or trigger price of an order. For trigger orders, if the
 | ---              | ---     | ---      | ---                                                                                                                                                                                                                                                                                                 |
 | symbol           | String  | Yes      | Market symbol                                                                                                                                                                                                                                                                                       |
 | clOrderID        | String  | Yes      | Customer tag sent in by trader                                                                                                                                                                                                                                                                      |
-| fillSize         | Double  | Yes      | Trade filled size                                                                                                                                                                                                                                                                                   |
 | orderID          | String  | Yes      | Order ID                                                                                                                                                                                                                                                                                            |
 | orderType        | Integer  | Yes      | Order type <br/>76: Limit order<br/>77: Market order<br/>80: Peg/Algo order                                                                                                                                                                                                                         |
 | postOnly         | Boolean | Yes      | Indicates if order is a post only order                                                                                                                                                                                                                                                             |
 | price            | Double  | Yes      | Order price                                                                                                                                                                                                                                                                                         |
-| side             | String  | Yes      | Order side<br/>BUY or SELL                                                                                                                                                                                                                                                                          |
-| size             | Double  | Yes      | Order size                                                                                                                                                                                                                                                                                          |
+| side             | String  | Yes      | Trade side. Values are: [`BUY`, `SELL`]                                                                                                                                                                                                                                                                          |
 | status           | Integer | Yes      | Order status<br/>	2: Order Inserted<br/>4: Order Fully Transacted<br/>5: Order Partially Transacted<br/>6: Order Cancelled<br/>7: Order Refunded<br/>8: Insufficient Balance<br/>9: Trigger Inserted<br>10: Trigger Activated<br/>15: Order Rejected<br/>16: Order Not Found<br/>17: Request Failed |
 | stopPrice        | Double  | Yes      | Stop price                                                                                                                                                                                                                                                                                          |
 | time_in_force    | String  | Yes      | Order validity                                                                                                                                                                                                                                                                                      |
 | timestamp        | Long  | Yes      | Order timestamp                                                                                                                                                                                                                                                                                     |
 | trigger          | Boolean  | Yes      | Indicator if order is a trigger order                                                                                                                                                                                                                                                               |
 | triggerPrice     | Double  | Yes      | Order trigger price, returns 0 if order is not a trigger order                                                                                                                                                                                                                                      |
-| averageFillPrice | Double  | Yes      | Average filled price. Returns the average filled price for partially transacted orders                                                                                                                                                                                                              |
+| avgFilledPrice | Double  | Yes      | Average filled price. Returns the average filled price for partially transacted orders                                                                                                                                                                                                              |
 | message          | String  | Yes      | Trade messages                                                                                                                                                                                                                                                                                      |
 | stealth          | Double  | Yes      | Stealth value of order                                                                                                                                                                                                                                                                              |
 | deviation        | Double  | Yes      | Deviation value of order                                                                                                                                                                                                                                                                            |
+| originalOrderBaseSize                 | Double  | Yes      | The original order quantity in base currency. This value will not change even if adjustments are made later.                                                                           |
+| originalOrderQuoteSize                 | Double  | Yes      | The original order quantity in quote currency. This value will not change even if adjustments are made later.                                                                           |
+| currentOrderBaseSize                 | Double  | Yes      | The latest order quantity in base currency, which means the sum of the filled quantity and the remaining unfilled quantity.                                                                           |
+| currentOrderQuoteSize                 | Double  | Yes      | The latest order quantity in quote currency, which means the sum of the filled quantity and the remaining unfilled quantity.                                                                           |
+| remainingOrderBaseSize                 | Double  | Yes      | The remaining order quantity in base currency = Current Order Base Size - Filled Base Size.                                                                           |
+| remainingOrderQuoteSize                 | Double  | Yes      | The remaining order quantity in quote currency = Current Order Quote Size - Filled Quote Size.                                                                           |
+| filledBaseSize                 | Double  | Yes      | The quantity of the order in base currency that has been filled.                                                                           |
+| totalFilledBaseSize                 | Double  | Yes      | Cumulative filled quantity of this order in base currency.                                                                           |
+| orderCurrency                 | String  | Yes      | "base" or "quote"                                                                           |
 
 
 ## Cancel Order
@@ -1165,7 +1111,7 @@ Amend the price or size or trigger price of an order. For trigger orders, if the
 > Request
 
 ```
-/api/v3.2/order?symbol=BTC-USD&clOrderID=my-order-id
+/api/v3.3/order?symbol=BTC-USD&clOrderID=my-order-id
 ```
 
 > Response (general)
@@ -1174,25 +1120,31 @@ Amend the price or size or trigger price of an order. For trigger orders, if the
 [
   {
     "status": 6,
-    "symbol": "BTC-USD",
+    "symbol": "BTC-USDT",
     "orderType": 76,
-    "price": 24000.0,
+    "price": 90000,
     "side": "BUY",
-    "size": 1.0,
-    "orderID": "9be4a6bb-bf56-4a81-a105-2a22c9629a48",
-    "timestamp": 1660278598333,
-    "triggerPrice": 0.0,
+    "orderID": "56c03da5-3d7b-4c5c-8b13-1b3de5be2e33",
+    "timestamp": 1752130038115,
+    "triggerPrice": 0,
     "stopPrice": null,
     "trigger": false,
     "message": "",
-    "averageFillPrice": 0.0,
-    "fillSize": 0.0,
-    "clOrderID": "jack-test-1",
-    "stealth": 1.0,
-    "deviation": 1.0,
-    "postOnly": false,
-    "originalSize": 1.0,
-    "remainingSize": 1.0,
+    "clOrderID": "_W_ejrojwq1752129916234",
+    "stealth": 1,
+    "deviation": 1,
+    "postOnly": true,
+    "orderDetailType": null,
+    "originalOrderBaseSize": 0.00001,
+    "originalOrderQuoteSize": null,
+    "currentOrderBaseSize": 0.00001,
+    "currentOrderQuoteSize": null,
+    "remainingOrderBaseSize": 0.00001,
+    "remainingOrderQuoteSize": null,
+    "filledBaseSize": 0,
+    "totalFilledBaseSize": 0,
+    "orderCurrency": "base",
+    "avgFilledPrice": 0,
     "time_in_force": "GTC"
   }
 ]
@@ -1203,64 +1155,76 @@ Amend the price or size or trigger price of an order. For trigger orders, if the
 [
   {
     "status": 6,
-    "symbol": "BTC-USD",
+    "symbol": "BTC-USDT",
     "orderType": 76,
-    "price": 23000.0,
+    "price": 110000,
     "side": "BUY",
-    "size": 1.0,
-    "orderID": "e3806536-776c-4d8f-8436-bde12a79620b",
-    "timestamp": 1660286055127,
-    "triggerPrice": 0.0,
+    "orderID": "54b3ab22-132b-4df0-9378-beacdc808e5c",
+    "timestamp": 1752133730711,
+    "triggerPrice": 0,
     "stopPrice": null,
     "trigger": false,
     "message": "",
-    "averageFillPrice": 0.0,
-    "fillSize": 0.0,
-    "clOrderID": "",
-    "stealth": 1.0,
-    "deviation": 1.0,
+    "clOrderID": "_W_mcjffli1752129293688",
+    "stealth": 1,
+    "deviation": 1,
     "postOnly": false,
-    "originalSize": 1.0,
-    "remainingSize": 1.0,
+    "orderDetailType": null,
+    "originalOrderBaseSize": 0.0001,
+    "originalOrderQuoteSize": null,
+    "currentOrderBaseSize": 0.0001,
+    "currentOrderQuoteSize": null,
+    "remainingOrderBaseSize": 0.0001,
+    "remainingOrderQuoteSize": null,
+    "filledBaseSize": 0,
+    "totalFilledBaseSize": 0,
+    "orderCurrency": "base",
+    "avgFilledPrice": 0,
     "time_in_force": "GTC"
   },
   {
     "status": 6,
-    "symbol": "BTC-USD",
+    "symbol": "BTC-USDT",
     "orderType": 76,
-    "price": 0.0,
+    "price": 0,
     "side": "BUY",
-    "size": 1.0,
-    "orderID": "ad4d0eeb-81a1-48f4-86c3-90436bb53718",
-    "timestamp": 1660286055128,
-    "triggerPrice": 40010.0,
+    "orderID": "fae47714-4c75-4956-9e6a-832cbf2d9a09",
+    "timestamp": 1752133730710,
+    "triggerPrice": 120000,
     "stopPrice": null,
     "trigger": true,
     "message": "",
-    "averageFillPrice": 0.0,
-    "fillSize": 0.0,
-    "clOrderID": "",
-    "stealth": 1.0,
-    "deviation": 1.0,
+    "clOrderID": "_W_mcjffli1752129293688",
+    "stealth": 1,
+    "deviation": 1,
     "postOnly": false,
-    "originalSize": 1.0,
-    "remainingSize": 0.0,
+    "orderDetailType": null,
+    "originalOrderBaseSize": 0.0001,
+    "originalOrderQuoteSize": null,
+    "currentOrderBaseSize": 0.0001,
+    "currentOrderQuoteSize": null,
+    "remainingOrderBaseSize": 0,
+    "remainingOrderQuoteSize": null,
+    "filledBaseSize": 0,
+    "totalFilledBaseSize": 0,
+    "orderCurrency": "base",
+    "avgFilledPrice": 0,
     "time_in_force": "GTC"
   }
 ]
 ```
 
-`DELETE /api/v3.2/order`
+`DELETE /api/v3.3/order`
 
 Cancels pending orders that has not yet been transacted. The `orderID` is a unique identifier to cancel a particular order. `clOrderID` is a custom ID sent in by the trader. When cancel by `clOrderID`, all orders having the same ID will be cancelled. If `orderID` and `clOrderID` is not sent in, then cancellation will be for all orders in the current market. Requires `Trading` permission.
 
 ### Request Parameters
 
-| Name      | Type   | Required | Description                              |
-| ---       | ---    | ---      | ---                                      |
-| symbol    | String | Yes      | Market symbol                            |
-| orderID   | String | No       | Unique identifier for an order.          |
-| clOrderID | String | No       | Client custom order ID.                  |
+| Name      | Type   | Required | Description                      |
+| ---       | ---    | ---      | ---                              |
+| symbol    | String | Yes      | Market symbol                    |
+| orderID   | String | No       | Unique identifier for an order.  |
+| clOrderID | String | No       | Client custom order ID.          |
 
 ### Response Content
 
@@ -1268,23 +1232,30 @@ Cancels pending orders that has not yet been transacted. The `orderID` is a uniq
 | ---              | ---     | ---      | ---                                                                                                                                                                                                                                                                                             |
 | symbol           | String  | Yes      | Market symbol                                                                                                                                                                                                                                                                                   |
 | clOrderID        | String  | Yes      | Customer tag sent in by trader                                                                                                                                                                                                                                                                  |
-| fillSize         | Double  | Yes      | Trade filled size                                                                                                                                                                                                                                                                               |
 | orderID          | String  | Yes      | Order ID                                                                                                                                                                                                                                                                                        |
 | orderType        | Integer  | Yes      | Order type <br/>76: Limit order<br/>77: Market order<br/>80: Peg/Algo order                                                                                                                                                                                                                     |
 | postOnly         | Boolean | Yes      | Indicates if order is a post only order                                                                                                                                                                                                                                                         |
 | price            | Double  | Yes      | Order price                                                                                                                                                                                                                                                                                     |
-| side             | String  | Yes      | Order side<br/>BUY or SELL                                                                                                                                                                                                                                                                      |
-| size             | Double  | Yes      | Cancelled size                                                                                                                                                                                                                                                                                  |
+| side             | String  | Yes      | Trade side. Values are: [`BUY`, `SELL`]                                                                                                                                                                                                                                                                      |
 | status           | Integer | Yes      | Order status<br/>	2: Order Inserted<br/>3: Order Transacted<br/>4: Order Fully Transacted<br/>5: Order Partially Transacted<br/>6: Order Cancelled<br/>7: Order Refunded<br/>9: Trigger Inserted<br>10: Trigger Activated<br/>15: Order Rejected<br/>16: Order Not Found<br/>17: Request failed |
 | stopPrice        | Double  | Yes      | Stop price                                                                                                                                                                                                                                                                                      |
 | time_in_force    | String  | Yes      | Order validity                                                                                                                                                                                                                                                                                  |
 | timestamp        | Long  | Yes      | Order timestamp                                                                                                                                                                                                                                                                                 |
 | trigger          | Boolean  | Yes      | Indicator if order is a trigger order                                                                                                                                                                                                                                                           |
 | triggerPrice     | Double  | Yes      | Order trigger price, returns 0 if order is not a trigger order                                                                                                                                                                                                                                  |
-| averageFillPrice | Double  | Yes      | Average filled price. Returns the average filled price for partially transacted orders                                                                                                                                                                                                          |
+| avgFilledPrice | Double  | Yes      | Average filled price. Returns the average filled price for partially transacted orders                                                                                                                                                                                                          |
 | message          | String  | Yes      | Trade messages                                                                                                                                                                                                                                                                                  |
 | stealth          | Double  | Yes      | Stealth value of order                                                                                                                                                                                                                                                                          |
 | deviation        | Double  | Yes      | Deviation value of order                                                                                                                                                                                                                                                                        |
+| originalOrderBaseSize                 | Double  | Yes      | The original order quantity in base currency. This value will not change even if adjustments are made later.                                                                           |
+| originalOrderQuoteSize                 | Double  | Yes      | The original order quantity in quote currency. This value will not change even if adjustments are made later.                                                                           |
+| currentOrderBaseSize                 | Double  | Yes      | The latest order quantity in base currency, which means the sum of the filled quantity and the remaining unfilled quantity.                                                                           |
+| currentOrderQuoteSize                 | Double  | Yes      | The latest order quantity in quote currency, which means the sum of the filled quantity and the remaining unfilled quantity.                                                                           |
+| remainingOrderBaseSize                 | Double  | Yes      | The remaining order quantity in base currency = Current Order Base Size - Filled Base Size.                                                                           |
+| remainingOrderQuoteSize                 | Double  | Yes      | The remaining order quantity in quote currency = Current Order Quote Size - Filled Quote Size.                                                                           |
+| filledBaseSize                 | Double  | Yes      | The quantity of the order in base currency that has been filled.                                                                           |
+| totalFilledBaseSize                 | Double  | Yes      | Cumulative filled quantity of this order in base currency.                                                                           |
+| orderCurrency                 | String  | Yes      | "base" or "quote"                                                                           |
 
 ## Dead Man's Switch (Cancel All After)
 
@@ -1296,7 +1267,7 @@ Cancels pending orders that has not yet been transacted. The `orderID` is a uniq
 }
 ```
 
-`POST /api/v3.2/order/cancelAllAfter`
+`POST /api/v3.3/order/cancelAllAfter`
 
 Dead-man's switch allows the trader to send in a timeout value which is a Time to live (TTL) value for an order. Extension of the timeout is done by sending another `cancelAllAfter` request. If the server does not receive another request before the timeout is reached, all orders will be cancelled. Requires `Trading` permission.
 
@@ -1317,38 +1288,88 @@ Dead-man's switch allows the trader to send in a timeout value which is a Time t
 
 ```json
 [
-  {
-    "orderType": 76,
-    "price": 35000.0,
-    "size": 0.01,
-    "side": "BUY",
-    "orderValue": 350.0,
-    "filledSize": 0.0,
-    "pegPriceMin": 0.0,
-    "pegPriceMax": 0.0,
-    "pegPriceDeviation": 0.0,
-    "cancelDuration": 0,
-    "timestamp": 1660291619263,
-    "orderID": "3c9c9c1f-8fef-43d0-82c7-ccef67435b14",
-    "triggerOrder": false,
-    "triggerPrice": 0.0,
-    "triggerOriginalPrice": 0.0,
-    "triggerOrderType": 0,
-    "triggerTrailingStopDeviation": 0.0,
-    "triggerStopPrice": 0.0,
-    "symbol": "BTC-USD",
-    "trailValue": 0.0,
-    "averageFillPrice": 0.0,
-    "fillSize": 0.0,
-    "clOrderID": "_yndef1660291619198",
-    "orderState": "STATUS_ACTIVE",
-    "timeInForce": "GTC",
-    "triggered": false
-  }
+    {
+        "orderID": "fae47714-4c75-4956-9e6a-832cbf2d9a09",
+        "requestId": 9018830890442560439,
+        "vendorName": null,
+        "botID": null,
+        "orderType": 76,
+        "price": 111318.3,
+        "side": "BUY",
+        "orderValue": 11.136338391,
+        "pegPriceMin": 0,
+        "pegPriceMax": 0,
+        "pegPriceDeviation": 0,
+        "cancelDuration": 0,
+        "timestamp": 1752129347246,
+        "triggerOrder": true,
+        "triggerPrice": 120048.6,
+        "triggerOriginalPrice": 120000,
+        "triggerOrderType": 1001,
+        "triggerTrailingStopDeviation": 0,
+        "triggerStopPrice": 0,
+        "symbol": "BTC-USDT",
+        "trailValue": 0,
+        "quote": "USDT",
+        "clOrderID": "_W_mcjffli1752129293688",
+        "orderState": "STATUS_ACTIVE",
+        "timeInForce": "GTC",
+        "orderDetailType": null,
+        "orderDetail": null,
+        "originalOrderBaseSize": 0.0001,
+        "originalOrderQuoteSize": null,
+        "currentOrderBaseSize": 0.0001,
+        "currentOrderQuoteSize": null,
+        "remainingOrderBaseSize": 0.0001,
+        "remainingOrderQuoteSize": null,
+        "totalFilledBaseSize": 0,
+        "orderCurrency": "base",
+        "avgFilledPrice": 0,
+        "triggered": false
+    },
+    {
+        "orderID": "54b3ab22-132b-4df0-9378-beacdc808e5c",
+        "requestId": 3237203630362690520,
+        "vendorName": null,
+        "botID": null,
+        "orderType": 76,
+        "price": 110000,
+        "side": "BUY",
+        "orderValue": 11.004455,
+        "pegPriceMin": 0,
+        "pegPriceMax": 0,
+        "pegPriceDeviation": 0,
+        "cancelDuration": 0,
+        "timestamp": 1752129347245,
+        "triggerOrder": false,
+        "triggerPrice": 0,
+        "triggerOriginalPrice": 0,
+        "triggerOrderType": 0,
+        "triggerTrailingStopDeviation": 0,
+        "triggerStopPrice": 0,
+        "symbol": "BTC-USDT",
+        "trailValue": 0,
+        "quote": "USDT",
+        "clOrderID": "_W_mcjffli1752129293688",
+        "orderState": "STATUS_ACTIVE",
+        "timeInForce": "GTC",
+        "orderDetailType": null,
+        "orderDetail": null,
+        "originalOrderBaseSize": 0.0001,
+        "originalOrderQuoteSize": null,
+        "currentOrderBaseSize": 0.0001,
+        "currentOrderQuoteSize": null,
+        "remainingOrderBaseSize": 0.0001,
+        "remainingOrderQuoteSize": null,
+        "totalFilledBaseSize": 0,
+        "orderCurrency": "base",
+        "avgFilledPrice": 0,
+        "triggered": true
+    }
 ]
 ```
 
-`GET /api/v3.2/user/open_orders`
+`GET /api/v3.3/user/open_orders`
 
 Retrieves open orders that have not yet been matched or matched recently. Requires `Trading` permission.
 
@@ -1367,10 +1388,8 @@ Retrieves open orders that have not yet been matched or matched recently. Requir
 | ---                          | ---    | ---      | ---                                                                                  |
 | orderType                  | Integer | Yes      | Order type <br/>76: Limit order<br/>77: Market order<br/>80: Peg/Algo order            |
 | price                      | Double | Yes      | Order price                                                                            |
-| size                       | Double | Yes      | Order size                                                                             |
-| side                       | String | Yes      | Order side<br/>`BUY` or `SELL`                                                         |
+| side                       | String | Yes      | Trade side. Values are: [`BUY`, `SELL`]                                                         |
 | orderValue                 | Double | Yes      | Total value of of this order                                                           |
-| filledSize                 | Double | Yes      | Filled size                                                                            |
 | pegPriceMin                | Double | Yes      | Minimum possible peg price this takes precedence over pegPriceDeviation                |
 | pegPriceMax                | Double | Yes      | Maximum possible peg price this takes precedence over pegPriceDeviation                |
 | pegPriceDeviation          | Double | Yes      | Percentage deviation from Index price                                                  |
@@ -1385,12 +1404,19 @@ Retrieves open orders that have not yet been matched or matched recently. Requir
 | triggerStopPrice           | Double | Yes      | Stop price, Algo Order only                                                            |
 | symbol                     | String | Yes      | Market name (e.g. BTC-USD)                                                             |
 | trailValue                 | Double | Yes      | Trail value                                                                            |
-| averageFillPrice           | Double | Yes      | Average filled price. Returns the average filled price for partially transacted orders |
-| fillSize                   | Double | Yes      | Fill size                                                                              |
+| avgFilledPrice           | Double | Yes      | Average filled price. Returns the average filled price for partially transacted orders |
 | clOrderID                  | String | Yes      | Customer order ID                                                                      |
 | orderState                 | String | Yes      | `STATUS_ACTIVE`, `STATUS_INACTIVE`                                                     |
 | timeInForce                | String | Yes      | Order validity                                                                         |
 | triggered                  | Boolean   | Yes      | Indicate whether the order is triggered                                               |
+ originalOrderBaseSize                 | Double  | Yes      | The original order quantity in base currency. This value will not change even if adjustments are made later.                                                                           |
+| originalOrderQuoteSize                 | Double  | Yes      | The original order quantity in quote currency. This value will not change even if adjustments are made later.                                                                           |
+| currentOrderBaseSize                 | Double  | Yes      | The latest order quantity in base currency, which means the sum of the filled quantity and the remaining unfilled quantity.                                                                           |
+| currentOrderQuoteSize                 | Double  | Yes      | The latest order quantity in quote currency, which means the sum of the filled quantity and the remaining unfilled quantity.                                                                           |
+| remainingOrderBaseSize                 | Double  | Yes      | The remaining order quantity in base currency = Current Order Base Size - Filled Base Size.                                                                           |
+| remainingOrderQuoteSize                 | Double  | Yes      | The remaining order quantity in quote currency = Current Order Quote Size - Filled Quote Size.                                                                           |
+| totalFilledBaseSize                 | Double  | Yes      | Cumulative filled quantity of this order in base currency.                                                                           |
+| orderCurrency                 | String  | Yes      | "base" or "quote"                                                                           |
 
 ## Query User Trades Fills
 
@@ -1399,34 +1425,34 @@ Retrieves open orders that have not yet been matched or matched recently. Requir
 ```json
 [
   {
-    "tradeId": "9c6d016f-fbe3-4f82-aecc-8163e9220397",
-    "orderId": "ba0b69ae-991e-494a-afcb-bfbaeb1adc55",
-    "clOrderID": "_W_dmoryhbw1698118893191",
+    "tradeId": "a85de513-4ddf-489b-8601-b1aa96d97ad6",
+    "orderId": "f4aa8d57-c062-4ba9-b22e-09c4249d53f5",
+    "clOrderID": null,
     "username": "btse",
     "side": "BUY",
     "orderType": 77,
     "triggerType": 0,
-    "price": 34799.000000025,
-    "size": 0.4,
-    "filledPrice": 34799.000000025,
-    "filledSize": 0.00001,
+    "price": 111381.3460167,
+    "size": 100,
+    "filledPrice": 111381.3460167,
+    "filledSize": 0.00089,
     "triggerPrice": 0,
     "base": "BTC",
-    "quote": "USDT",
-    "symbol": "BTC-USDT",
+    "quote": "USD",
+    "symbol": "BTC-USD",
     "feeCurrency": "BTC",
-    "feeAmount": 0.000000006,
+    "feeAmount": 5.34e-7,
     "wallet": "SPOT@",
     "realizedPnl": 0,
     "total": 0,
-    "serialId": 94711228,
-    "timestamp": 1698118893000,
-    "averageFillPrice": 34799.000000025
+    "serialId": 926957588,
+    "timestamp": 1752129085233,
+    "avgFilledPrice": 111381.3460167
   }
 ]
 ```
 
-`GET /api/v3.2/user/trade_history`
+`GET /api/v3.3/user/trade_history`
 
 Retrieves a user's trade history which includes funding fee data. Requires `Read` permission.
 
@@ -1445,7 +1471,7 @@ Retrieves a user's trade history which includes funding fee data. Requires `Read
 * maximum days of trade history
 
 | Time Interval       | Maximum Days  | Explanation                                                                             |
-| :---:               | ---:          | :---:                                                                                   |
+| ---                 | :---:         | ---                                                                                   |
 | startTime / endTime | 7            | Maximum **7** days within the specified interval. If specified interval exceeds **7** days, the **start time** will be set to **7** days before the **end time**                                    |
 | startTime /    -    | 7             | If the **end time** is not specified, then **7** days after the **start time**          |
 |      -    / endTime | 7             | If the **start time** is not specified, then **7** days before the **end time**         |
@@ -1467,7 +1493,7 @@ Retrieves a user's trade history which includes funding fee data. Requires `Read
 | clOrderID       | Long   | yes      | Custom order id                         |
 | orderId         | Long   | yes      | Order id                                |
 | feeAmount       | Long   | yes      | Fee amount                              |
-| feeCurrency     | Long   | yes      | Fee currency                            |
+| feeCurrency     | String | yes      | Fee currency                            |
 | filledPrice     | Long   | yes      | Filled price                            |
 | filledSize      | Long   | yes      | Filled size                             |
 | orderType       | Integer| yes      | Order type                              |
@@ -1476,7 +1502,7 @@ Retrieves a user's trade history which includes funding fee data. Requires `Read
 | triggerType     | Integer| yes      | 1001: Stop Loss 1002: Take Profit       |
 | triggerPrice    | Double | yes      | Trigger price                           |
 | wallet          | String | yes      | SPOT@ for spot transactions             |
-| averageFillPrice| String | yes      | Average fill price                      |
+| avgFilledPrice  | Double | yes      | Average fill price                      |
 | username        | String | yes      | Username                                |
 
 
@@ -1492,19 +1518,19 @@ Retrieves a user's trade history which includes funding fee data. Requires `Read
 }
 ```
 
-`GET /api/v3.2/user/fees`
+`GET /api/v3.3/user/fees`
 
 Retrieve user's trading fees. Requires `Read` permission.
 
 ### request parameters
 
-| name     | type     | required | description                                   |
+| Name     | Type     | Required | Description                                   |
 | -------- | -------- | -------- | --------------------------------------------- |
 | symbol   | String   | no       | market symbol to filter for specific market   |
 
 ### response content
 
-| name     | type   | required | description   |
+| Name     | Type   | Required | Description   |
 | ---      | ---    | ---      | ---           |
 | symbol   | String | yes      | market symbol |
 | makerFee | Double | yes      | maker fees    |
@@ -1542,7 +1568,7 @@ Retrieve user's trading fees. Requires `Read` permission.
 ]
 ```
 
-`GET /api/v3.2/invest/products`
+`GET /api/v3.3/invest/products`
 
 Get all investment products. Requires `Read` permission.
 
@@ -1552,24 +1578,24 @@ Get all investment products. Requires `Read` permission.
 
 ### response content
 
-| name               | type         | required | description                              |
+| Name               | Type         | Required | Description                              |
 | ---                | ---          | ---      | ---                                      |
-| id                 | String       | yes      | product id                               |
-| name               | String       | yes      | product name                             |
-| currency           | String       | yes      | currency                                 |
-| type               | String       | yes      | product type                             |
-| startDate          | Long         | yes      | investment start date                    |
-| interestStartDate  | Long         | yes      | interest start date                      |
-| rates              | Rate Object   | yes      | interest rate information                |
-| compounding        | Double       | yes      | is product compounding                   |
-| autoRenewSupported | Double       | yes      | is product supported renew automatically |
-| dailyLimit         | Double       | yes      | daily invent amount limit                |
-| minsize            | Double       | yes      | minimum invest size                      |
-| incrementalSize    | Double       | yes      | invest step size                         |
+| id                 | String       | yes      | Product id                               |
+| name               | String       | yes      | Product name                             |
+| currency           | String       | yes      | Currency                                 |
+| type               | String       | yes      | Product type                             |
+| startDate          | Long         | yes      | Investment start date                    |
+| interestStartDate  | Long         | yes      | Interest start date                      |
+| rates              | Rate Object  | yes      | Interest rate information                |
+| compounding        | Double       | yes      | Is product compounding                   |
+| autoRenewSupported | Double       | yes      | Is product supported renew automatically |
+| dailyLimit         | Double       | yes      | Daily invent amount limit                |
+| minsize            | Double       | yes      | Minimum invest size                      |
+| incrementalSize    | Double       | yes      | Invest step size                         |
 
 ### Rate Object
 
-| name | type    | required | description      |
+| Name | Type    | Required | Description      |
 | ---  | ---     | ---      | ---              |
 | days | Integer | yes      | duration in days |
 | rate | Double  | yes      | interest rate    |
@@ -1586,13 +1612,13 @@ Get all investment products. Requires `Read` permission.
 }
 ```
 
-`POST /api/v3.2/invest/deposit`
+`POST /api/v3.3/invest/deposit`
 
 Deposit an investment. Requires `Wallet` permission.
 
 ### request parameters
 
-| name      | type    | required | description         |
+| Name      | Type    | Required | Description         |
 | ---       | ---     | ---      | ---                 |
 | productId | String  | yes      | invest product id   |
 | amount    | Double  | yes      | invest amount       |
@@ -1618,20 +1644,20 @@ Deposit an investment. Requires `Wallet` permission.
 }
 ```
 
-`POST /api/v3.2/invest/renew`
+`POST /api/v3.3/invest/renew`
 
 Renew an investment order. Requires `Wallet` permission.
 
 ### request parameters
 
-| name      | type    | required | description         |
+| Name      | Type    | Required | Description         |
 | ---       | ---     | ---      | ---                 |
 | orderId   | Integer | yes      | investment order id |
 | autoRenew | Boolean | yes      | renew automatically |
 
 ### response content
 
-| name      | type    | required | description              |
+| Name      | Type    | Required | Description              |
 | ---       | ---     | ---      | ---                      |
 | orderId   | Integer | yes      | investment order id      |
 | autoRenew | Boolean | yes      | status of autoRenew flag |
@@ -1648,13 +1674,13 @@ Renew an investment order. Requires `Wallet` permission.
 }
 ```
 
-`POST /api/v3.2/invest/redeem`
+`POST /api/v3.3/invest/redeem`
 
 Redeem an investment order. Requires `Wallet` permission.
 
 ### request parameters
 
-| name    | type    | required | description         |
+| Name    | Type    | Required | Description         |
 | ---     | ---     | ---      | ---                 |
 | orderId | Integer | yes      | investment order id |
 | amount  | Double  | yes      | redeem amount       |
@@ -1674,7 +1700,7 @@ Redeem an investment order. Requires `Wallet` permission.
     "rate": 1.15,
     "investAmt": 10.00000000,
     "interestEarned": 0.00031507,
-    "nextInterestPayoutTime": 1610632800000,
+    "nextInterestPayOutTime": 1610632800000,
     "starttime": 0,
     "endtime": 0,
     "duration": 86400000,
@@ -1687,13 +1713,13 @@ Redeem an investment order. Requires `Wallet` permission.
 ]
 ```
 
-`GET /api/v3.2/invest/orders`
+`GET /api/v3.3/invest/orders`
 
 Query investment orders. Requires `Wallet` permission.
 
 ### response content
 
-| name                   | type    | required | description                      |
+| Name                   | Type    | Required | Description                      |
 | ---                    | ---     | ---      | ---                              |
 | id                     | Integer | yes      | Order id                         |
 | name                   | String  | yes      | Product name                     |
@@ -1701,14 +1727,14 @@ Query investment orders. Requires `Wallet` permission.
 | type                   | String  | yes      | Product type                     |
 | rate                   | Double  | yes      | Interest rate                    |
 | investment             | Double  | yes      | Amount                           |
-| interestEarned         | Double  | yes      | Interest earned                  |
+| interestEarned         | Double  | yes      | Interest earned                 |
 | nextInterestPayoutTime | Integer | yes      | Next interest payout time        |
 | starttime              | Integer | yes      | Start time                       |
 | endtime                | Integer | yes      | End time                         |
 | duration               | Integer | yes      | Duration                         |
 | payoutLockTime         | Integer | yes      | Lock time of payout              |
 | autoRenew              | Boolean | yes      | Renew automatically              |
-| compounding            | Boolean  | yes     | Is compounding                   |
+| compounding            | Boolean | yes      | Is compounding                   |
 | autoRenewSupported     | Boolean | yes      | Is renew automatically supported |
 | redemptionProcessing   | Boolean | yes      | Is redemption processing         |
 
@@ -1733,13 +1759,13 @@ Query investment orders. Requires `Wallet` permission.
 ]
 ```
 
-`GET /api/v3.2/invest/history`
+`GET /api/v3.3/invest/history`
 
 Query investment history. Requires `Wallet` permission.
 
 ### response content
 
-| name           | type    | required | description                    |
+| Name           | Type    | Required | Description                    |
 | ---            | ---     | ---      | ---                            |
 | txnTime        | Integer | yes      | Transaction time               |
 | name           | String  | yes      | Product name                   |
@@ -1956,8 +1982,8 @@ Also if [crossed orderbook](https://en.wikipedia.org/wiki/Order_book#Crossed_boo
 | ---        | ---          | ---      | ---                                                                                                         |
 | bids       | Quote Object | Yes      | Bid quotes                                                                                                  |
 | asks       | Quote Object | Yes      | Asks quotes                                                                                                 |
-| seqNum     | Integer          | Yes      | Current sequence number                                                                                     |
-| prevSeqNum | Integer          | Yes      | Previous sequence number                                                                                    |
+| seqNum     | Integer          | Yes      | Current sequence Double                                                                                     |
+| prevSeqNum | Integer          | Yes      | Previous sequence Double                                                                                    |
 | type       | String       | Yes      | `snapshot` - Snapshot of the orderbook with a maximum of 50 levels<br/> `delta` -  Updates of the orderbook |
 | timestamp  | Long         | Yes      | Timestamp of the orderbook                                                                                  |
 | symbol     | String       | Yes      | Orderbook symbol                                                                                            |
@@ -2023,7 +2049,7 @@ to subscribe to a websocket public trade fill
 
 ### request parameters
 
-| name | type   | required | description                                                                                                            |
+| Name | Type   | Required | Description                                                                                                            |
 | ---  | ---    | ---      | ---                                                                                                                    |
 | op   | String | yes      | operation. `subscribe` will subscribe to the topics provided in `args`. `unsubscribe` will unsubscribe from the topics |
 | args | Array  | yes      | topics to subscribe to.                                                                                                |
@@ -2082,14 +2108,14 @@ Subscribe to recent trade feed for a market. The topic will be `tradeHistoryApi:
 
 #### Data Object
 
-| Name      | Type   | Required | Description             |
-| ---       | ---    | ---      | ---                     |
-| symbol    | String | Yes      | Market symbol           |
-| side      | String | Yes      | Trade Side, BUY or SELL |
-| size      | Double | Yes      | Transacted size         |
-| price     | Double | Yes      | Transacted price        |
-| tradeId   | Long   | Yes      | Trade sequence Id       |
-| timestamp | Long   | Yes      | Trade timestamp         |
+| Name      | Type   | Required | Description                             |
+| ---       | ---    | ---      | ---                                     |
+| symbol    | String | Yes      | Market symbol                           |
+| side      | String | Yes      | Trade side. Values are: [`BUY`, `SELL`] |
+| size      | Double | Yes      | Transacted size                         |
+| price     | Double | Yes      | Transacted price                        |
+| tradeId   | Long   | Yes      | Trade sequence Id                       |
+| timestamp | Long   | Yes      | Trade timestamp                         |
 
 ## Authentication
 
@@ -2143,7 +2169,7 @@ echo -n "/ws/spot1624985375123"  | openssl dgst -sha384 -hmac "848db84ac252b6726
 {
   "op": "subscribe",
   "args": [
-    "notificationApiV2"
+    "notificationApiV3"
   ]
 }
 ```
@@ -2152,57 +2178,69 @@ echo -n "/ws/spot1624985375123"  | openssl dgst -sha384 -hmac "848db84ac252b6726
 
 ```json
 {
-  "topic": "notificationApiV2",
+  "topic": "notificationApiV3",
   "data": {
-      "symbol": "Market Symbol (eg. BTC-USD)",
-      "orderID": "BTSE internal order ID",
-      "side": "BUY",
-      "type": "76",
-      "price": "Order price or transacted price",
-      "size": "Order size or transacted size",
-      "originalSize": "Order size",
-      "avgFillPrice": 35000,
-      "fillSize": 0.001,
-      "status": "<Refer to Status description on the left>",
-      "clOrderID": "<Client order ID>",
-      "maker": "<Maker flag, if true indicates that trade is a maker trade>",
-      "stealth": 1,
-      "timestamp": 1624985375123,
-      "pegPriceDeviation": "Indicate the deviation percentage. Valid for only algo orders.",
-      "remainingSize": "<Remaining size on the order>",
-      "time_in_force": "<Time where this order is valid>",
-      "txType": 0,
-      "triggerPrice": "Trade Trigger Price"
-    }
+    "symbol": "BTC-USDT",
+    "orderID": "789b05fa-dd43-43e8-8626-e229ae216ead",
+    "side": "MODE_BUY",
+    "orderType": 77,
+    "txType": 0,
+    "price": 111131,
+    "triggerPrice": 0,
+    "pegPriceDeviation": 1,
+    "stealth": 1,
+    "status": 5,
+    "timestamp": 1752147703368,
+    "avgFilledPrice": 111131,
+    "clOrderID": "_W_bjvf1752147703280",
+    "maker": false,
+    "postOnly": false,
+    "orderUserInitiated": true,
+    "originalOrderBaseSize": 0,
+    "originalOrderQuoteSize": 1000,
+    "currentOrderBaseSize": 0,
+    "currentOrderQuoteSize": 1000,
+    "filledBaseSize": 0.00899,
+    "totalFilledBaseSize": 0.00899,
+    "remainingBaseSize": 0,
+    "remainingQuoteSize": 0.93231,
+    "orderCurrency": "USDT",
+    "time_in_force": "GTC"
+  }
 }
-
 ```
 
-Receive trade notifications by subscribing to the topic `notificationApiV2`. The websocket feed will push trade level notifications to the subscriber. If topic is subscribed without being authenticated, no messages will be sent.
+Receive trade notifications by subscribing to the topic `notificationApiV3`. The websocket feed will push trade level notifications to the subscriber. If topic is subscribed without being authenticated, no messages will be sent.
 
 ### Response Content
 
-| Name              | Type    | Required | Description                                                                   |
-| ---               | ---     | ---      | ---                                                                           |
+| Name              | Type    | Required | Description                                               |
+| ---               | ---     | ---      | ---                                                       |
 | symbol            | String  | Yes      | Market symbol                                                                 |
 | orderID           | String  | Yes      | Internal order ID                                                             |
-| side              | String  | Yes      | Trade side. BUY or SELL                                                       |
-| type              | Integer     | Yes      | Order type. Valid values are:<br/>76: Limit order<br/>77: Market order<br/>80: Peg/Algo order  |
+| side              | String  | Yes      | Trade side. Values are: [`BUY`, `SELL`]                                                       |
+| orderType              | Integer     | Yes      | Order type. Valid values are:<br/>76: Limit order<br/>77: Market order<br/>80: Peg/Algo order  |
 | price             | Double  | Yes      | Order price or transacted price                                               |
-| size              | Double  | Yes      | Order size or transacted size                                                 |
-| originalSize      | Double  | Yes      | Original order size                                                           |
 | avgFilledPrice    | Double  | Yes      | Average filled price                                                          |
-| fillSize          | Double  | Yes      | Filled size of order                                                          |
 | status            | Integer | Yes      | Status with values as follows:<br/>1: MARKET_UNAVAILABLE, Market is currently unavailable<br/>2: ORDER_INSERTED, Order is inserted successfully<br/>4: ORDER_FULLY_TRANSACTED, Order is fully transacted<br/>5: ORDER_PARTIALLY_TRANSACTED, Order is partially transacted<br/>6: ORDER_CANCELLED, Order is cancelled successfully<br/>8: INSUFFICIENT_BALANCE, Insufficient balance in account<br/>9: TRIGGER_INSERTED, Trigger Order is inserted successfully<br/>10: TRIGGER_ACTIVATED, Trigger Order is activated successfully<br/>12: ERROR_UPDATE_RISK_LIMIT, Error in updating risk limit<br/>15: ORDER_REJECTED, Change made to the order was unsuccessful<br/>27: TRANSFER_SUCCESSFUL, Transfer funds between futures and spot is successful<br/>28: TRANSFER_UNSUCCESSFUL, Transfer funds between spot and futures is unsuccessful<br/>41: ERROR_INVALID_RISK_LIMIT, Invalid risk limit was specified<br/>64: STATUS_LIQUIDATION, Account is undergoing liquidation<br/>101: FUTURES_ORDER_PRICE_OUTSIDE_LIQUIDATION_PRICE, Futures order is outside of liquidation price<br/>1003: ORDER_LIQUIDATION, Order is undergoing liquidation<br/>1004: ORDER_ADL, Order is undergoing ADL |
 | clOrderID         | String  | Yes      | Custom order ID                                                               |
 | maker             | Boolean | Yes      | Indicator to indicate if trade is a maker trade                               |
 | remainingSize     | Double  | Yes      | Remaining size on the order                                                   |
 | time_in_force     | String  | Yes      | Validity of the order                                                         |
 | timestamp         | Long    | Yes      | Order timestamp or transacted timestamp                                       |
-| txType            | Integer  | Yes      | Used by trigger or OCO orders. STOP indicates its a Stop order, TAKEPROFIT indicates its a take profit order, and LIMIT is when its not any of the above    |
 | stealth           | Double  | Yes      | Percentage of orders to show on orderbook. Only for Algo orders               |
 | pegPriceDeviation | Double  | Yes      | Deviation percentage. Only for Algo orders                                    |
 | triggerPrice      | Double  | Yes      | Trigger Price                                                                 |
+| txType            | Integer  | Yes      | Used by trigger or OCO orders. </br>0: Limit</br>1: Stop</br>2: Trigger</br>3: OCO</br>STOP indicates its a Stop order, TAKEPROFIT indicates its a take profit order, and LIMIT is when its not any of the above    |
+| originalOrderBaseSize                 | Double  | Yes      | The original order quantity in base currency. This value will not change even if adjustments are made later.                                                                           |
+| originalOrderQuoteSize                 | Double  | Yes      | The original order quantity in quote currency. This value will not change even if adjustments are made later.                                                                           |
+| currentOrderBaseSize                 | Double  | Yes      | The latest order quantity in base currency, which means the sum of the filled quantity and the remaining unfilled quantity.                                                                           |
+| currentOrderQuoteSize                 | Double  | Yes      | The latest order quantity in quote currency, which means the sum of the filled quantity and the remaining unfilled quantity.                                                                           |
+| remainingOrderBaseSize                 | Double  | Yes      | The remaining order quantity in base currency = Current Order Base Size - Filled Base Size.                                                                           |
+| remainingOrderQuoteSize                 | Double  | Yes      | The remaining order quantity in quote currency = Current Order Quote Size - Filled Quote Size.                                                                           |
+| filledBaseSize                 | Double  | Yes      | The quantity of the order in base currency that has been filled.                                                                           |
+| totalFilledBaseSize                 | Double  | Yes      | Cumulative filled quantity of this order in base currency.                                                                           |
+| orderCurrency                 | String  | Yes      | "base" or "quote"                                                                           |
 
 ## User Trade Fills
 
@@ -2255,7 +2293,7 @@ When a trade has been transacted, this topic will send the trade information bac
 | serialId    | String  | Yes      | Trade sequence ID                                                                             |
 | tradeId     | String  | Yes      | Trade unique identifier                                                                       |
 | type        | Integer     | Yes      | Order type. Valid values are:<br/>76: Limit order<br/>77: Market order<br/>80: Peg/Algo order |
-| side        | String  | Yes      | Trade side. BUY or SELL                                                                       |
+| side        | String  | Yes      | Trade side. Values are: [`BUY`, `SELL`]                                                                       |
 | price       | Double  | Yes      | Transacted price                                                                              |
 | size        | Double  | Yes      | Transacted size                                                                               |
 | feeAmount   | Double  | Yes      | Fee amount charged                                                                            |

@@ -13,6 +13,25 @@ headingLevel: 2
 
 # Change Log
 
+## Version 1.1.4 (8th December 2025)
+
+* Updated documentation to clarify the behavior difference in symbol representation between Market and Wallet-related APIs.
+  - The [Market Summary](https://btsecom.github.io/docs/futuresV2_3/en/#market-summary) API uses K/M/B prefixed symbols in the symbol field for crypto assets with small prices and processes trade quantities accordingly. Example: `K_PEIPEI`
+  - Wallet-related APIs here now consistently use the original crypto name (without K/M/B prefix) for both request and response payloads. This matches the base field shown in the [Market Summary](https://btsecom.github.io/docs/futuresV2_3/en/#market-summary) API. Example: `PEIPEI`
+
+## Version 1.1.3 (10th July 2025)
+
+* [**IMPORTANT**] BTSE will phase out support for two open API endpoints by **July 30, 2025**. The following endpoints will be deprecated:
+  - [`Query available crypto network list for currency`](#query-available-crypto-network-list-for-currency-deprecated)
+  - [`Query exchange rate between assets`](#query-exchange-rate-between-assets-deprecated)
+
+  We encourage developers to transition away from these endpoints as they will no longer be supported after the end of July.</br>
+  A new, improved endpoint to replace these can be accessed here:
+  
+  - [`Query crypto networks`](#query-crypto-networks)
+  - [`Query asset exchange rate`](#query-asset-exchange-rate)
+
+
 ## Version 1.1.2 (10th April 2024)
 
 * Update description of `status` and `type` in [`Query Wallet History`](#query-wallet-history)
@@ -65,6 +84,8 @@ You will need to create an API key on the BTSE platform before you can use authe
 * Production
   * HTTP
      * `https://api.btse.com/spot`
+  * HTTP (for [`Query crypto networks`](#query-crypto-networks) and [`Query asset exchange rate`](#query-asset-exchange-rate))
+     * `https://api.btse.com/`
   * Websocket
      * `wss://ws.btse.com/ws/spot`
   * Websocket (for orderbook stream)
@@ -72,6 +93,8 @@ You will need to create an API key on the BTSE platform before you can use authe
 * Testnet
   * HTTP
      * `https://testapi.btse.io/spot`
+  * HTTP (for [`Query crypto networks`](#query-crypto-networks) and [`Query asset exchange rate`](#query-asset-exchange-rate))
+     * `https://testapi.btse.io/`
   * Websocket
      * `wss://testws.btse.io/ws/spot`
   * Websocket (for orderbook stream)
@@ -80,10 +103,10 @@ You will need to create an API key on the BTSE platform before you can use authe
 ## Authentication
 
 * API Key (request-api)
-  * Parameter Name: `request-api`, in: header. API key is obtained from BTSE platform as a string
+  * Parameter Name: `request-api`, in: header. API key is obtained from BTSE platform as a String
 
 * API Key (request-nonce)
-  * Parameter Name: `request-nonce`, in: header. Representation of current timestamp in long format
+  * Parameter Name: `request-nonce`, in: header. Representation of current timestamp in Long format
 
 * API Key (request-sign)
   * Parameter Name: `request-sign`, in: header. A composite signature produced based on the following algorithm: Signature=HMAC.Sha384 (secretkey, (urlpath + request-nonce + bodyStr)) (note: bodyStr = '' when no data):
@@ -132,7 +155,11 @@ Each API will return one of the following HTTP status:
 
 # Public Endpoints
 
-## Query available crypto network list for currency
+For crypto with small prices, the [Market Summary](https://btsecom.github.io/docs/futuresV2_3/en/#market-summary) API displays them using K/M/B prefixes in `symbol` field and process trades with the corresponding quantities. (ex. `K_PEIPEI`) 
+
+However, Wallet-related APIs display the actual crypto information, so both requests and responses will use the original crypto name, same as `base` field in [Market Summary](https://btsecom.github.io/docs/futuresV2_3/en/#market-summary) API. (ex. `PEIPEI`)
+
+## Query available crypto network list for currency (Deprecated)
 
 > Response
 
@@ -145,21 +172,21 @@ Each API will return one of the following HTTP status:
 
 `GET /api/v3.2/availableCurrencyNetworks`
 
-Get available crypto network list for currency.
+Get available crypto network list for currency. This endpoint will be deprecated after **July 30, 2025**. Please replace this endpoint with [`Query crypto networks`](#query-crypto-networks).
 
 ### Request Parameters
 
 | Name     | Type   | Required | Description |
 | ---      | ---    | ---      | ---         |
-| currency | string | Yes      | Ex: BTC     |
+| currency | String | Yes      | Ex: BTC     |
 
 ### Response Content
 
 | Name     | Type   | Required | Description     |
 | ---      | ---    | ---      | ---             |
-| $network | string | Yes      | Name of network |
+| $network | String | Yes      | Name of network |
 
-## Query exchange rate between assets
+## Query exchange rate between assets (Deprecated)
 
 > Response
 
@@ -175,24 +202,172 @@ Get available crypto network list for currency.
 
 `GET /api/v3.2/exchangeRate`
 
-Get the exchange rate between assets.
+Get the exchange rate between assets. This endpoint will be deprecated after **July 30, 2025**. Please replace this endpoint with [`Query asset exchange rate`](#query-asset-exchange-rate).
 
 ### Request Parameters
 
 | Name             | Type     | Required   | Description   |
 | ---------------- | -------- | ---------- | ------------- |
-| srcCurrency      | string   | Yes        | Ex: BTC       |
-| targetCurrency   | string   | Yes        | Ex: USD       |
+| srcCurrency      | String   | Yes        | Ex: BTC       |
+| targetCurrency   | String   | Yes        | Ex: USD       |
 
 ### Response Content
 
 | Name             | Type      | Required   | Description                    |
 | ---------------- | --------- | ---------- | ------------------------------ |
-| code             | integer   | Yes        | Return code                    |
-| msg              | string    | Yes        | Return message                 |
-| time             | long      | Yes        | Unix timestamp                 |
-| data             | float     | Yes        | Exchange rate between assets   |
-| success          | boolean   | Yes        | True or False                  |
+| code             | Integer   | Yes        | Return code                    |
+| msg              | String    | Yes        | Return message                 |
+| time             | Long      | Yes        | Unix timestamp                 |
+| data             | Float     | Yes        | Exchange rate between assets   |
+| success          | Boolean   | Yes        | True or False                  |
+
+## Query Crypto Networks
+
+> Response
+
+```json
+{
+  "success": true,
+  "code": 1,
+  "msg": "Success",
+  "time": 1624989977940,
+  "data": [
+    {
+      "network": "ERC20",
+      "name": "Ethereum (ERC20)",
+      "depositEnable": true,
+      "withdrawEnable": true,
+      "confirmationTime": 15,
+      "depositAmtMin": "0",
+      "depositFeeMin": "0",
+      "depositFeeRate": "0",
+      "depositExtFees": "0",
+      "depositExtFeeRate": "0",
+      "needAddressExtension": false,
+      "withdrawAmtMin": "36.41",
+      "withdrawFeeMin": "6.41",
+      "withdrawFeeRate": "0",
+      "withdrawExtFees": "0",
+      "withdrawExtFeeRate": "0"
+    },
+    {
+      "network": "RIPPLE",
+      "name": "Ripple",
+      "depositEnable": true,
+      "withdrawEnable": true,
+      "confirmationTime": 10,
+      "depositAmtMin": "0",
+      "depositFeeMin": "0",
+      "depositFeeRate": "0",
+      "depositExtFees": "0",
+      "depositExtFeeRate": "0",
+      "needAddressExtension": true,
+      "addressExtensionTypeName": "tag",
+      "withdrawAmtMin": "0.25",
+      "withdrawFeeMin": "20",
+      "withdrawFeeRate": "0",
+      "withdrawExtFees": "0",
+      "withdrawExtFeeRate": "0"
+    }
+  ]
+}
+```
+
+`GET /public-api/wallet/v1/crypto/networks`
+
+Get crypto network list with corresponding crypto.
+
+This API can be publicly accessed without any security headers to get a default network list.
+
+If you access with `Read` permission authentication, the result will be much more accurate by account setting.
+The response of `depositEnable` and `withdrawEnable` is true by default under the publicly accessed environment.
+
+* The total deposit fee is `max(depositFeeMin, (amount * depositFeeRate)) + (depositExtFees + depositExtFeeRate * amount)`.
+* The total withdrawal fee is `max(withdrawFeeMin, (amount * withdrawFeeRate)) + (withdrawExtFees + withdrawExtFeeRate * amount)`.
+
+### Request Parameters
+
+| Name             | Type     | Required   | Description   |
+| ---------------- | -------- | ---------- | ------------- |
+| crypto           | String   | Yes        | Ex: BTC       |
+
+
+### Response Content
+
+| Name             | Type      | Required   | Description                                             |
+| ---------------- | --------- | ---------- | ------------------------------------------------------- |
+| data             | Object    | Yes        | Array of objects (CryptoNetworkItem)                    |
+| success          | Boolean   | Yes        |Request validation is successful or not. It will be set to `true` when the HTTP status is `200.`                                                                        |
+| code             | Integer   | Yes        | Request status code. It will be set to `1` when the request is processed successfully. When unsuccessful, there will be an error code.                               |
+| msg              | String    | Yes        | Request status message. It will be set to `Success` when the request is processed successfully. When unsuccessful, there will be an error message.                 |
+| time             | Long      | Yes        | Current unix timestamp.                                 |
+
+### Data Object (CryptoNetworkItem)
+
+| Name                     | Type     | Required | Description                          |
+|--------------------------|----------|----------|--------------------------------------|
+| network                  | String   | Yes      | Network                              |
+| name                     | String   | Yes      | Network name                         |
+| depositEnable            | Boolean  | Yes      | Allow to deposit                     |
+| withdrawEnable           | Boolean  | Yes      | Allow to withdraw                    |
+| confirmationTime         | Integer  | No       | Expected block confirmation time     |
+| depositAmtMin            | String   | Yes      | Minimum amount of deposit            |
+| depositFeeMin            | String   | Yes      | Minimum fees of deposit              |
+| depositFeeRate           | String   | Yes      | Fee rate of deposit                  |
+| depositExtFees           | String   | Yes      | Extra fees of deposit                |
+| depositExtFeeRate        | String   | Yes      | Extra fee rate of deposit            |
+| needAddressExtension     | Boolean  | Yes      | Supported address extension          |
+| addressExtensionTypeName | String   | No       | Address extension type (e.g. tag)    |
+| withdrawAmtMin           | String   | Yes      | Minimum amount of withdrawal         |
+| withdrawFeeMin           | String   | Yes      | Minimum fees of withdraw             |
+| withdrawFeeRate          | String   | Yes      | Fee rate of withdrawal               |
+| withdrawExtFees          | String   | Yes      | Extra fees of withdraw               |
+| withdrawExtFeeRate       | String   | Yes      | Extra fee rate of withdraw           |
+
+## Query Asset Exchange Rate
+
+> Response
+
+```json
+{
+  "success": true,
+  "code": 1,
+  "msg": "Success",
+  "time": 1624989977940,
+  "data": {
+    "rate": "19026.12846161"
+  }
+}
+```
+
+`GET /public-api/wallet/v1/assets/exchangeRate`
+
+Retrieve exchange rate about a specific pair. For example, `baseCurrency` and `quoteCurrency`.
+
+### Request Parameters
+
+| Name             | Type     | Required   | Description                                                    |
+| ---------------- | -------- | ---------- | -------------------------------------------------------------  |
+| baseCurrency     | String   | Yes        | Example: baseCurrency=BTC</br>Base currency, such as BTC       |
+| amount           | String   | Yes        | Example: amount=2</br>The quantity of `baseCurrency` .         |
+| quoteCurrency    | String   | Yes        | Example: quoteCurrency=USDT</br>Quote currency, such as USDT.  |
+
+### Response Content
+
+### Response Content
+
+| Name             | Type      | Required   | Description                                             |
+| ---------------- | --------- | ---------- | ------------------------------------------------------- |
+| data             | Object    | Yes        | Array of objects (CryptoNetworkItem)                    |
+| success          | Boolean   | Yes        |Request validation is successful or not. It will be set to `true` when the HTTP status is `200.`                                                                        |
+| code             | Integer   | Yes        | Request status code. It will be set to `1` when the request is processed successfully. When unsuccessful, there will be an error code.                               |
+| msg              | String    | Yes        | Request status message. It will be set to `Success` when the request is processed successfully. When unsuccessful, there will be an error message.                 |
+| time             | Long      | Yes        | Current unix timestamp.                                 |
+
+### Data Object
+| Name                     | Type     | Required | Description                                        |
+|--------------------------|----------|----------|--------------------------------------------------- |
+| rate                     | String   | No       | The rate of base-currency to quote-currency.       |
 
 # Wallet Endpoints
 
@@ -218,9 +393,9 @@ Query user's wallet balance. Requires `Read` permissions on the API key.
 
 | Name      | Type   | Required | Description       |
 | ---       | ---    | ---      | ---               |
-| currency  | string | Yes      | Currency          |
-| total     | double | Yes      | Total balance     |
-| available | double | Yes      | Available balance |
+| currency  | String | Yes      | Currency          |
+| total     | Double | Yes      | Total balance     |
+| available | Double | Yes      | Available balance |
 
 ## Query Wallet History
 
@@ -231,7 +406,7 @@ Query user's wallet balance. Requires `Read` permissions on the API key.
   {
     "amount": 21.35823825,
     "currency": "USD",
-    "description": "string",
+    "description": "String",
     "fees": 0.06,
     "orderId": 20181213000239,
     "status": "COMPLETED",
@@ -253,25 +428,25 @@ Get user's wallet history records on the spot wallet
 
 | Name               | Type    | Required | Description                                                            |
 | ---                | ---     | ---      | ---                                                                    |
-| currency           | string  | No       | Currency, if not specified will return all currencies                  |
-| startTime          | long    | No       | Starting time in milliseconds (eg. 1624987283000)                      |
-| endTime            | long    | No       | Ending time in milliseconds (eg. 1624987283000)                        |
-| count              | integer | No       | Number of records to return                                            |
-| useNewSymbolNaming | boolean | No       | True to return futures market name in the new format, default to False |
+| currency           | String  | No       | Currency, if not specified will return all currencies                  |
+| startTime          | Long    | No       | Starting time in milliseconds (eg. 1624987283000)                      |
+| endTime            | Long    | No       | Ending time in milliseconds (eg. 1624987283000)                        |
+| count              | Integer | No       | Number of records to return                                            |
+| useNewSymbolNaming | Boolean | No       | True to return futures market name in the new format, default to False |
 
 
 ### Response Content
 
 | Name        | Type    | Required | Description                                |
 | ---         | ---     | ---      | ---                                        |
-| currency    | string  | Yes      | Currency                                   |
-| amount      | double  | Yes      | Amount in the record                       |
-| fees        | double  | Yes      | Fees charged if any                        |
-| orderId     | string  | Yes      | Internal wallet order ID                   |
-| wallet      | string  | Yes      | Wallet type. For spot will return `@SPOT`  |
-| description | string  | Yes      | Description of the transaction             |
-| status      | string  | Yes      | The status of the record is as follows<br/>`PROCESSING`<br/>`CANCELLED`<br/>`COMPLETED`<br/>`EXPIRED`<br/>`FAILURE`<br/>`PENDING` |
-| type        | string  | Yes      | The type of the record is as follows<br/>`Deposit`<br/>`Withdraw`<br/>`Convert fiat`<br/>`Transfer_Out`<br/>`Transfer_In`<br/>`ReferralEarning`<br/>`Trading Fee Stake Freeze`<br/>`Trading Fee Stake Unfreeze`<br/>`Sub Account Transfer In`<br/>`Sub Account Transfer Out`<br/>`express buy`<br/>`Strategy Income`<br/>`Strategy Pay`<br/>`token voucher in`<br/>`spot trading fee rebate`<br/>`futures trading fee rebat`<br/>`trial fund`<br/>`general trading fee rebate`<br/>`token voucher out` |
+| currency    | String  | Yes      | Currency                                   |
+| amount      | Double  | Yes      | Amount in the record                       |
+| fees        | Double  | Yes      | Fees charged if any                        |
+| orderId     | String  | Yes      | Internal wallet order ID                   |
+| wallet      | String  | Yes      | Wallet type. For spot will return `@SPOT`  |
+| description | String  | Yes      | Description of the transaction             |
+| status      | String  | Yes      | The status of the record is as follows<br/>`PROCESSING`<br/>`CANCELLED`<br/>`COMPLETED`<br/>`EXPIRED`<br/>`FAILURE`<br/>`PENDING` |
+| type        | String  | Yes      | The type of the record is as follows<br/>`Deposit`<br/>`Withdraw`<br/>`Convert fiat`<br/>`Transfer_Out`<br/>`Transfer_In`<br/>`ReferralEarning`<br/>`Trading Fee Stake Freeze`<br/>`Trading Fee Stake Unfreeze`<br/>`Sub Account Transfer In`<br/>`Sub Account Transfer Out`<br/>`express buy`<br/>`Strategy Income`<br/>`Strategy Pay`<br/>`token voucher in`<br/>`spot trading fee rebate`<br/>`futures trading fee rebate`<br/>`trial fund`<br/>`general trading fee rebate`<br/>`token voucher out` |
 
 ## Create Wallet Address
 
@@ -279,7 +454,8 @@ Get user's wallet history records on the spot wallet
 
 ```json
 {
-  "currency": "BTC-LIQUID"
+  "currency": "BTC",
+  "network": "LIQUID"
 }
 ```
 
@@ -294,7 +470,7 @@ Get user's wallet history records on the spot wallet
 ]
 ```
 
-`POST /api/v3.2/user/wallet/address`
+`POST /api/v3.2/user/wallet/address` or `POST /api/v3.3/user/wallet/address`
 
 Creates a wallet address. If the address created has not been used before, a 400 error will return with the existing unused address. To use this API, `Wallet` permission is required.
 
@@ -302,15 +478,15 @@ Creates a wallet address. If the address created has not been used before, a 400
 
 | Name     | Type   | Required | Description |
 | ---      | ---    | ---      | ---         |
-| currency | string | Yes      | Ex: BTC     |
-| network  | string | Yes      | Ex: BITCOIN |
+| currency | String | Yes      | Ex: BTC     |
+| network  | String | Yes      | Ex: BITCOIN |
 
 ### Response Content
 
 | Name    | Type   | Required | Description        |
 | ---     | ---    | ---      | ---                |
-| address | string | Yes      | Blockchain address |
-| created | long   | Yes      | Created timestamp  |
+| address | String | Yes      | Blockchain address |
+| created | Long   | Yes      | Created timestamp  |
 
 ## Delete Wallet Address
 
@@ -324,7 +500,7 @@ Creates a wallet address. If the address created has not been used before, a 400
 }
 ```
 
-`DELETE /api/v3.2/user/wallet/address`
+`DELETE /api/v3.2/user/wallet/address` or `DELETE /api/v3.3/user/wallet/address`
 
 Delete  wallet address. If the address has been delete, a 400 error will return. To use this API, `Wallet` permission is required.
 
@@ -332,9 +508,9 @@ Delete  wallet address. If the address has been delete, a 400 error will return.
 
 | Name     | Type   | Required | Description |
 |----------| ---    | ---      | ---         |
-| currency | string | Yes      | Ex: BTC     |
-| network  | string | Yes      | Ex: BITCOIN |
-| address  | string | Yes      | Ex: Blockchain address |
+| currency | String | Yes      | Ex: BTC     |
+| network  | String | Yes      | Ex: BITCOIN |
+| address  | String | Yes      | Ex: Blockchain address |
 
 ## Get Wallet Address
 
@@ -358,7 +534,7 @@ Delete  wallet address. If the address has been delete, a 400 error will return.
 ]
 ```
 
-`GET /api/v3.2/user/wallet/address`
+`GET /api/v3.2/user/wallet/address` or `GET /api/v3.3/user/wallet/address`
 
 Gets a wallet address. To use this API, `Wallet` permission is required.
 
@@ -366,15 +542,15 @@ Gets a wallet address. To use this API, `Wallet` permission is required.
 
 | Name     | Type   | Required | Description |
 | ---      | ---    | ---      | ---         |
-| currency | string | Yes      | Ex: BTC     |
-| network  | string | Yes      | Ex: BITCOIN |
+| currency | String | Yes      | Ex: BTC     |
+| network  | String | Yes      | Ex: BITCOIN |
 
 ### Response Content
 
 | Name    | Type   | Required | Description        |
 | ---     | ---    | ---      | ---                |
-| address | string | Yes      | Blockchain address |
-| created | long   | Yes      | Created timestamp  |
+| address | String | Yes      | Blockchain address |
+| created | Long   | Yes      | Created timestamp  |
 
 ## Withdraw Funds
 
@@ -393,11 +569,11 @@ Gets a wallet address. To use this API, `Wallet` permission is required.
 
 ```json
 {
-  "withdraw_id": "<withdrawal ID>"
+  "withdrawId": "<withdrawal ID>"
 }
 ```
 
-`POST /api/v3.2/user/wallet/withdraw`
+`POST /api/v3.2/user/wallet/withdraw` or `POST /api/v3.3/user/wallet/withdraw`
 
 Performs a wallet withdrawal. To use this API, `Withdraw` permission is required.
 
@@ -405,17 +581,17 @@ Performs a wallet withdrawal. To use this API, `Withdraw` permission is required
 
 | Name               | Type    | Required | Description                                                                                                                                                                                                                                                                            |
 | ---                | ---     | ---      | ---                                                                                                                                                                                                                                                                                    |
-| currency           | string  | Yes      | Currency-Network pair <br> Currency list can be retrieved from [Available currency list for action](#query-available-currency-list-for-wallet-action) <br> Network list can be retrieved from [Available network list for currency](#query-available-crypto-network-list-for-currency) |
-| address            | string  | Yes      | Blockchain address                                                                                                                                                                                                                                                                     |
-| tag                | string  | Yes      | Tag, used only by some blockchain (eg. XRP)                                                                                                                                                                                                                                            |
-| amount             | string  | Yes      | Amount to withdraw (Max decimal supported is `8` for all currencies). Will return Invalid withdraw amount (code: 3506) if exceeds                                                                                                                                                      |
-| includeWithdrawFee | boolean | No       | If true or the field doesn't exist, the fee is included in amount. Otherwise, the fee is extra added and the deducted amount can be larger than the amount claimed                                                                                                                     |
+| currency           | String  | Yes      | Currency-Network pair <br> Currency list can be retrieved from [Available currency list for action](#query-available-currency-list-for-wallet-action) <br> Network list can be retrieved from [Available network list for currency](#query-available-crypto-network-list-for-currency) |
+| address            | String  | Yes      | Blockchain address                                                                                                                                                                                                                                                                     |
+| tag                | String  | Yes      | Tag, used only by some blockchain (eg. XRP)                                                                                                                                                                                                                                            |
+| amount             | String  | Yes      | Amount to withdraw (Max decimal supported is `8` for all currencies). Will return Invalid withdraw amount (code: 3506) if exceeds                                                                                                                                                      |
+| includeWithdrawFee | Boolean | No       | If true or the field doesn't exist, the fee is included in amount. Otherwise, the fee is extra added and the deducted amount can be larger than the amount claimed                                                                                                                     |
 
 ### Response Content
 
 | Name        | Type   | Required | Description                                                                                                                                                                                                     |
 | ---         | ---    | ---      | ---                                                                                                                                                                                                             |
-| withdraw_id | string | Yes      | Internal withdrawal ID. References the `orderID` field in `wallet_history` API. As withdrawal will not be processed immediately. User can query the wallet history API to check on the status of the withdrawal |
+| withdrawId | String | Yes      | Internal withdrawal ID. References the `orderID` field in `wallet_history` API. As withdrawal will not be processed immediately. User can query the wallet history API to check on the status of the withdrawal |
 
 
 ## Query available currency list for wallet action
@@ -446,7 +622,7 @@ Get available currency list for wallet action.
 
 | Name          | Type   | Required | Description      |
 | ---           | ---    | ---      | ---              |
-| $currencyName | string | Yes      | Name of currency |
+| $currencyName | String | Yes      | Name of currency |
 
 
 ## Convert funds
@@ -481,19 +657,19 @@ Performs a currency conversion from wallet. To use this API, `Wallet` permission
 
 | Name      | Type   | Required | Description                     |
 | ---       | ---    | ---      | ---                             |
-| amount    | string | Yes      | amount of currency to convert   |
-| fromAsset | string | Yes      | source currency to be converted |
-| toAsset   | string | Yes      | destination currency            |
+| amount    | String | Yes      | amount of currency to convert   |
+| fromAsset | String | Yes      | source currency to be converted |
+| toAsset   | String | Yes      | destination currency            |
 
 ### Response Content
 
 | Name               | Type   | Required | Description                               |
 | ---                | ---    | ---      | ---                                       |
-| amount             | float  | Yes      | amount of source currency to be converted |
-| settlementAmount   | float  | Yes      | amount of converted destination currency  |
-| amountCurrency     | string | Yes      | source currency                           |
-| settlementCurrency | string | Yes      | destination currency                      |
-| rate               | float  | Yes      | exchange rate                             |
+| amount             | Float  | Yes      | amount of source currency to be converted |
+| settlementAmount   | Float  | Yes      | amount of converted destination currency  |
+| amountCurrency     | String | Yes      | source currency                           |
+| settlementCurrency | String | Yes      | destination currency                      |
+| rate               | Float  | Yes      | exchange rate                             |
 
 ## Transfer Funds
 
@@ -519,7 +695,7 @@ Performs a currency conversion from wallet. To use this API, `Wallet` permission
 }
 ```
 
-`POST /api/v3.2/user/wallet/transfer`
+`POST /api/v3.2/user/wallet/transfer` or `POST /api/v3.3/user/wallet/transfer`
 
 Performs a internal currency transfer to other user from wallet. To use this API, `Transfer` permission is required. To get supported currency list please check [Available currency list for action](#query-available-currency-list-for-wallet-action)
 
@@ -527,20 +703,20 @@ Performs a internal currency transfer to other user from wallet. To use this API
 
 | Name               | Type    | Required | Description                                                          |
 | ---                | ---     | ---      | ---                                                                  |
-| amount             | string  | Yes      | amount of currency to transfer                                       |
-| asset              | string  | Yes      | currency to be transferred                                           |
-| toUser             | string  | Yes      | receiver account                                                     |
-| toUserMail         | string  | Yes      | receiver email                                                       |
-| useNewSymbolNaming | boolean | No       | True if use new futures market name in asset field, default to False |
+| amount             | String  | Yes      | amount of currency to transfer                                       |
+| asset              | String  | Yes      | currency to be transferred                                           |
+| toUser             | String  | Yes      | receiver account                                                     |
+| toUserMail         | String  | Yes      | receiver email                                                       |
+| useNewSymbolNaming | Boolean | No       | True if use new futures market name in asset field, default to False |
 
 ### Response Content
 
 | Name       | Type   | Required | Description                    |
 | ---        | ---    | ---      | ---                            |
-| amount     | string | Yes      | amount of currency to transfer |
-| asset      | string | Yes      | currency to be transferred     |
-| toUser     | string | Yes      | receiver account               |
-| toUserMail | string | Yes      | receiver email                 |
+| amount     | String | Yes      | amount of currency to transfer |
+| asset      | String | Yes      | currency to be transferred     |
+| toUser     | String | Yes      | receiver account               |
+| toUserMail | String | Yes      | receiver email                 |
 
 ## Subaccount transfer history
 
@@ -570,7 +746,7 @@ Performs a internal currency transfer to other user from wallet. To use this API
 }
 ```
 
-`POST /api/v3.2/subaccount/wallet/history`
+`GET /api/v3.2/subaccount/wallet/history`
 
 Query transfer history for subaccounts
 
@@ -578,20 +754,20 @@ Query transfer history for subaccounts
 
 | Name               | Type    | Required | Description                                                          |
 | ---                | ---     | ---     | ---                                                            |
-| startTime          | long    | No       | Starting time in milliseconds (eg. 1624987283000)                      |
-| endTime            | long    | No       | Ending time in milliseconds (eg. 1624987283000)                        |
-| page             | string  | Yes     | Page number to query, default to 1 (1-based)           |
-| pageSize         | string  | Yes     | Number of records in a page, default to 10, maximum 50 |
+| startTime          | Long    | No       | Starting time in milliseconds (eg. 1624987283000)                      |
+| endTime            | Long    | No       | Ending time in milliseconds (eg. 1624987283000)                        |
+| page             | String  | Yes     | Page number to query, default to 1 (1-based)           |
+| pageSize         | String  | Yes     | Number of records in a page, default to 10, maximum 50 |
 
 ### Response Content
 
 | Name       | Type   | Required | Description                    |
 | ---        | ---    | ---     | ---                           |
-| totalRows | integer | Yes     |Total records               |
-| pageSize | integer | Yes     |Number of records in a page |
-| currentPage | integer | Yes     |current page number         |
-| timestamp | integer | Yes     | Unix timestamp                |
-| fromUser | string | Yes     | sender account                |
-| receiver | string | Yes     | receiver account                |
-| currency | string | Yes     | currency of transferred      |
-| amount | integer | Yes     | amount of currency                |
+| totalRows | Integer | Yes     |Total records               |
+| pageSize | Integer | Yes     |Number of records in a page |
+| currentPage | Integer | Yes     |current page number         |
+| timestamp | Integer | Yes     | Unix timestamp                |
+| fromUser | String | Yes     | sender account                |
+| receiver | String | Yes     | receiver account                |
+| currency | String | Yes     | currency of transferred      |
+| amount | Integer | Yes     | amount of currency                |

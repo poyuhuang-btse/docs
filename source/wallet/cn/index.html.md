@@ -13,6 +13,23 @@ headingLevel: 2
 
 # 更新日志
 
+## 版本 1.1.4 (2025年12月8日)
+
+* 更新文档以澄清 `市场` 与 `钱包` 相关 API 在符号表示上的行为差异。
+  - [`市场摘要`](https://btsecom.github.io/docs/futuresV2_3/cn/#7335b2436c) API 会在 symbol 字段中使用 K/M/B 前缀来表示低价加密资产，并根据对应数量进行处理。例如：`K_PEIPEI`
+  - 此处的 Wallet 相关 API 将始终使用原始的加密货币名称（不带 K/M/B 前缀）作为请求与返回字段。这与 [`市场摘要`](https://btsecom.github.io/docs/futuresV2_3/cn/#7335b2436c) API 中的 base 字段一致。例如：`PEIPEI`
+
+## 版本 1.1.3 (2025年7月10日)
+
+* [**重要**] BTSE 将于 2025年7月10日 起逐步停止支持以下两个 Open API 接口。以下接口将被弃用:
+  - [`查询货币的可用加密网络列表`](#77705abe66)
+  - [`查询资产间的汇率`](#0afe40d4b6)
+
+  我们鼓励开发者尽快停止使用这些接口，因为它们将在 7 月底之后不再受支持。可点击此处访问用于替代的全新升级接口：
+  
+  - [`查询加密货币网络信息`](#3526dbe03b)
+  - [`资产兑换汇率查询`](#52edd98764)
+
 ## 版本 1.1.2 (2024年4月10日)
 
 * 更新 [`查询钱包历史`](#bc1c4a9961) 中的 `status` 與 `type` 的描述
@@ -65,6 +82,8 @@ headingLevel: 2
 * 生产
   * HTTP
      * `https://api.btse.com/spot`
+  * HTTP (用于[`查询加密货币网络信息`](#3526dbe03b) and [`资产兑换汇率查询`](#52edd98764))
+       * `https://api.btse.com/`
   * Websocket
      * `wss://ws.btse.com/ws/spot`
   * Websocket (用于订单簿流)
@@ -72,6 +91,8 @@ headingLevel: 2
 * 测试网络
   * HTTP
      * `https://testapi.btse.io/spot`
+  * HTTP (用于[`查询加密货币网络信息`](#3526dbe03b) and [`资产兑换汇率查询`](#52edd98764))
+       * `https://testapi.btse.io/`
   * Websocket
      * `wss://testws.btse.io/ws/spot`
   * Websocket (用于订单簿流)
@@ -132,7 +153,11 @@ BTSE 的速率限制如下：
 
 # 公共端点
 
-## 查询货币的可用加密网络列表
+对于价格较小的加密货币，[`市场摘要`](https://btsecom.github.io/docs/futuresV2_3/cn/#7335b2436c) 会在 `symbol` 字段中使用 K/M/B 前缀进行展示，并按对应数量进行交易处理。（例如：`K_PEIPEI`）
+
+然而，与钱包相关的 API 会展示实际的加密货币信息，因此无论是请求或响应都将使用原始加密货币名称，与 [`市场摘要`](https://btsecom.github.io/docs/futuresV2_3/cn/#7335b2436c) 中的 `base` 字段一致。（例如：`PEIPEI`）
+
+## 查询货币的可用加密网络列表（弃用）
 
 > 响应
 
@@ -151,15 +176,15 @@ BTSE 的速率限制如下：
 
 | 名称     | 类型   | 必填 | 描述        |
 | ---      | ---    | ---  | ---         |
-| currency | string | Yes  | 示例：BTC   |
+| currency | String | Yes  | 示例：BTC   |
 
 ### 响应内容
 
 | 名称     | 类型   | 必填 | 描述         |
 | ---      | ---    | ---  | ---         |
-| $network | string | Yes  | 网络名称    |
+| $network | String | Yes  | 网络名称    |
 
-## 查询资产间的汇率
+## 查询资产间的汇率（弃用）
 
 > 响应
 
@@ -181,18 +206,164 @@ BTSE 的速率限制如下：
 
 | 名称             | 类型     | 必填   | 描述        |
 | ---------------- | -------- | ------ | ----------- |
-| srcCurrency      | string   | Yes    | 示例：BTC   |
-| targetCurrency   | string   | Yes    | 示例：USD   |
+| srcCurrency      | String   | Yes    | 示例：BTC   |
+| targetCurrency   | String   | Yes    | 示例：USD   |
 
 ### 响应内容
 
-| 名称             | 类型      | 必填   | 描述                      |
-| ---------------- | --------- | ------ | ------------------------ |
-| code             | integer   | Yes    | 返回码                    |
-| msg              | string    | Yes    | 返回消息                  |
-| time             | long      | Yes    | Unix时间戳                |
-| data             | float     | Yes    | 资产之间的汇率            |
-| success          | boolean   | Yes    | 是 或 否                  |
+| 名称              | 类型      | 必填   | 描述                       |
+| ---------------- | ----------| ------ | ------------------------ |
+| code             | Integer   | Yes    | 返回码                    |
+| msg              | String    | Yes    | 返回消息                  |
+| time             | Long      | Yes    | Unix时间戳                |
+| data             | Float     | Yes    | 资产之间的汇率             |
+| success          | Boolean   | Yes    | 是 或 否                  |
+
+## 查询加密货币网络信息
+
+> 响应
+
+```json
+{
+  "success": true,
+  "code": 1,
+  "msg": "Success",
+  "time": 1624989977940,
+  "data": [
+    {
+      "network": "ERC20",
+      "name": "Ethereum (ERC20)",
+      "depositEnable": true,
+      "withdrawEnable": true,
+      "confirmationTime": 15,
+      "depositAmtMin": "0",
+      "depositFeeMin": "0",
+      "depositFeeRate": "0",
+      "depositExtFees": "0",
+      "depositExtFeeRate": "0",
+      "needAddressExtension": false,
+      "withdrawAmtMin": "36.41",
+      "withdrawFeeMin": "6.41",
+      "withdrawFeeRate": "0",
+      "withdrawExtFees": "0",
+      "withdrawExtFeeRate": "0"
+    },
+    {
+      "network": "RIPPLE",
+      "name": "Ripple",
+      "depositEnable": true,
+      "withdrawEnable": true,
+      "confirmationTime": 10,
+      "depositAmtMin": "0",
+      "depositFeeMin": "0",
+      "depositFeeRate": "0",
+      "depositExtFees": "0",
+      "depositExtFeeRate": "0",
+      "needAddressExtension": true,
+      "addressExtensionTypeName": "tag",
+      "withdrawAmtMin": "0.25",
+      "withdrawFeeMin": "20",
+      "withdrawFeeRate": "0",
+      "withdrawExtFees": "0",
+      "withdrawExtFeeRate": "0"
+    }
+  ]
+}
+```
+
+`GET /public-api/wallet/v1/crypto/networks`
+
+获取加密货币对应的加密网络列表。
+
+此 API 可在无需任何安全标头的情况下公开访问，以获取默认的网络列表。
+
+如果使用具有 `Read` 权限的身份验证访问，结果将根据账户设置更为准确。
+在公开访问环境下， `depositEnable` 和 `withdrawEnable` 的响应默认为 true。
+
+* 总的充值手续费为： `max(depositFeeMin, (amount * depositFeeRate)) + (depositExtFees + depositExtFeeRate * amount)`
+* 总的提现手续费为： `max(withdrawFeeMin, (amount * withdrawFeeRate)) + (withdrawExtFees + withdrawExtFeeRate * amount)`
+
+### 请求参数
+
+| Name             | Type     | Required   | Description   |
+| ---------------- | -------- | ---------- | ------------- |
+| crypto           | String   | Yes        | 示例：BTC       |
+
+
+### 响应内容
+
+| Name             | Type      | Required   | Description                                             |
+| ---------------- | --------- | ---------- | ------------------------------------------------------- |
+| data             | Object    | Yes        | 物件陣列 (CryptoNetworkItem)                    |
+| success          | Boolean   | Yes        |請求校驗是否成功。當 HTTP 狀態為 `200`  時，該欄位將設為 `true`                                                                        |
+| code             | Integer   | Yes        | 請求狀態碼。當請求成功處理時，該欄位設為 `1`；失敗時則會返回錯誤碼。                               |
+| msg              | String    | Yes        | 請求狀態訊息。當請求成功處理時，該欄位為 `Success`；失敗時會顯示錯誤訊息。                 |
+| time             | Long      | Yes        | 當前的 unix 時間戳記。                                 |
+
+### 数据对象 (CryptoNetworkItem)
+
+| Name                     | Type     | Required | Description                          |
+|--------------------------|----------|----------|--------------------------------------|
+| network                  | String   | Yes      | 网络                                  |
+| name                     | String   | Yes      | 网络名称                              |
+| depositEnable            | Boolean  | Yes      | 是否允许充值                           |
+| withdrawEnable           | Boolean  | Yes      | 是否允许提现                           |
+| confirmationTime         | Integer  | No       | 区块确认预计时间                        |
+| depositAmtMin            | String   | Yes      | 最小充值金额                           |
+| depositFeeMin            | String   | Yes      | 最低充值手续费                         |
+| depositFeeRate           | String   | Yes      | 充值手续费率                           |
+| depositExtFees           | String   | Yes      | 额外充值手续费                         |
+| depositExtFeeRate        | String   | Yes      | 额外充值手续费率                       |
+| needAddressExtension     | Boolean  | Yes      | 是否支持地址扩展                        |
+| addressExtensionTypeName | String   | No       | 地址扩展类型（如 `tag`）                |
+| withdrawAmtMin           | String   | Yes      | 最小提现金额                           |
+| withdrawFeeMin           | String   | Yes      | 最低提现手续费                         |
+| withdrawFeeRate          | String   | Yes      | 提现手续费率                           |
+| withdrawExtFees          | String   | Yes      | 额外提现手续费                         |
+| withdrawExtFeeRate       | String   | Yes      | 额外提现手续费率                        |
+
+## 资产兑换汇率查询
+
+> 响应
+
+```json
+{
+  "success": true,
+  "code": 1,
+  "msg": "Success",
+  "time": 1624989977940,
+  "data": {
+    "rate": "19026.12846161"
+  }
+}
+```
+
+`GET /public-api/wallet/v1/assets/exchangeRate`
+
+获取特定交易对的汇率。例如：`baseCurrency` 和 `quoteCurrency`.
+
+### Request Parameters
+
+| Name             | Type     | Required   | Description                                                    |
+| ---------------- | -------- | ---------- | -------------------------------------------------------------  |
+| baseCurrency     | String   | Yes        | 示例：baseCurrency=BTC</br>基础币种，例如:BTC                     |
+| amount           | String   | Yes        | 示例：amount=2</br>`baseCurrency` 的数量                         |
+| quoteCurrency    | String   | Yes        | 示例：quoteCurrency=USDT</br>报价币种，例如:USDT                   |
+
+### 响应内容
+
+| Name             | Type      | Required   | Description                                             |
+| ---------------- | --------- | ---------- | ------------------------------------------------------- |
+| data             | Object    | Yes        | 物件陣列 (CryptoNetworkItem)                             |
+| success          | Boolean   | Yes        |請求校驗是否成功。當 HTTP 狀態為 `200`  時，該欄位將設為 `true`                                                                                                |
+| code             | Integer   | Yes        | 請求狀態碼。當請求成功處理時，該欄位設為 `1`；失敗時則會返回錯誤碼。                                                                                                   |
+| msg              | String    | Yes        | 請求狀態訊息。當請求成功處理時，該欄位為 `Success`；失敗時會顯示錯誤訊息。                                                                                                   |
+| time             | Long      | Yes        | 當前的 unix 時間戳記。                                     |
+
+### Data Object
+| Name                     | Type     | Required | Description                                        |
+|--------------------------|----------|----------|--------------------------------------------------- |
+| rate                     | String   | No       | base-currency 对 quote-currency 的汇率              |
 
 # 钱包端点
 
@@ -218,9 +389,9 @@ BTSE 的速率限制如下：
 
 | 名称      | 类型   | 必填 | 描述           |
 | ---       | ---    | ---  | ---            |
-| currency  | string | Yes  | 货币           |
-| total     | double | Yes  | 总余额         |
-| available | double | Yes  | 可用余额       |
+| currency  | String | Yes  | 货币           |
+| total     | Double | Yes  | 总余额         |
+| available | Double | Yes  | 可用余额       |
 
 ## 查询钱包历史
 
@@ -231,7 +402,7 @@ BTSE 的速率限制如下：
   {
     "amount": 21.35823825,
     "currency": "USD",
-    "description": "string",
+    "description": "String",
     "fees": 0.06,
     "orderId": 20181213000239,
     "status": "COMPLETED",
@@ -253,25 +424,25 @@ BTSE 的速率限制如下：
 
 | 名称               | 类型    | 必填 | 描述                                                                                                                                 |
 | ---                | ---     | ---  | ---                                                                                                                                  |
-| currency           | string  | No   | 货币，如果未指定则返回所有货币                                                                                                        |
-| startTime          | long    | No   | 起始时间（以毫秒为单位，例如 1624987283000）                                                                                          |
-| endTime            | long    | No   | 结束时间（以毫秒为单位，例如 1624987283000）                                                                                          |
-| count              | integer | No   | 要返回的记录数                                                                                                                        |
-| useNewSymbolNaming | boolean | No   | 如果为 True，则以新格式返回期货市场名称，默认为 False                                                                                 |
+| currency           | String  | No   | 货币，如果未指定则返回所有货币                                                                                                        |
+| startTime          | Long    | No   | 起始时间（以毫秒为单位，例如 1624987283000）                                                                                          |
+| endTime            | Long    | No   | 结束时间（以毫秒为单位，例如 1624987283000）                                                                                          |
+| count              | Integer | No   | 要返回的记录数                                                                                                                        |
+| useNewSymbolNaming | Boolean | No   | 如果为 True，则以新格式返回期货市场名称，默认为 False                                                                                 |
 
 
 ### 响应内容
 
 | 名称         | 类型    | 必填  | 描述                          |
 | ---         | ---     | ---  | ---                          |
-| currency    | string  | Yes  | 货币                          |
-| amount      | double  | Yes  | 记录中的金额                   |
-| fees        | double  | Yes  | 如有，将收取的费用              |
-| orderId     | string  | Yes  | 内部钱包订单 ID                |
-| wallet      | string  | Yes  | 钱包类型。对于现货将返回 `@SPOT` |
-| description | string  | Yes  | 交易描述                      |
-| status      | string  | Yes  | 记录的状态如下<br/>`PROCESSING`<br/>`CANCELLED`<br/>`COMPLETED`<br/>`EXPIRED`<br/>`FAILURE`<br/>`PENDING` |
-| type        | string  | Yes  | 记录的类型如下<br/>`Deposit`<br/>`Withdraw`<br/>`Convert fiat`<br/>`Transfer_Out`<br/>`Transfer_In`<br/>`ReferralEarning`<br/>`Trading Fee Stake Freeze`<br/>`Trading Fee Stake Unfreeze`<br/>`Sub Account Transfer In`<br/>`Sub Account Transfer Out`<br/>`express buy`<br/>`Strategy Income`<br/>`Strategy Pay`<br/>`token voucher in`<br/>`spot trading fee rebate`<br/>`futures trading fee rebat`<br/>`trial fund`<br/>`general trading fee rebate`<br/>`token voucher out` |
+| currency    | String  | Yes  | 货币                          |
+| amount      | Double  | Yes  | 记录中的金额                   |
+| fees        | Double  | Yes  | 如有，将收取的费用              |
+| orderId     | String  | Yes  | 内部钱包订单 ID                |
+| wallet      | String  | Yes  | 钱包类型。对于现货将返回 `@SPOT` |
+| description | String  | Yes  | 交易描述                      |
+| status      | String  | Yes  | 记录的状态如下<br/>`PROCESSING`<br/>`CANCELLED`<br/>`COMPLETED`<br/>`EXPIRED`<br/>`FAILURE`<br/>`PENDING` |
+| type        | String  | Yes  | 记录的类型如下<br/>`Deposit`<br/>`Withdraw`<br/>`Convert fiat`<br/>`Transfer_Out`<br/>`Transfer_In`<br/>`ReferralEarning`<br/>`Trading Fee Stake Freeze`<br/>`Trading Fee Stake Unfreeze`<br/>`Sub Account Transfer In`<br/>`Sub Account Transfer Out`<br/>`express buy`<br/>`Strategy Income`<br/>`Strategy Pay`<br/>`token voucher in`<br/>`spot trading fee rebate`<br/>`futures trading fee rebate`<br/>`trial fund`<br/>`general trading fee rebate`<br/>`token voucher out` |
 
 ## 创建钱包地址
 
@@ -279,7 +450,8 @@ BTSE 的速率限制如下：
 
 ```json
 {
-  "currency": "BTC-LIQUID"
+  "currency": "BTC",
+  "network": "LIQUID"
 }
 ```
 
@@ -294,7 +466,7 @@ BTSE 的速率限制如下：
 ]
 ```
 
-`POST /api/v3.2/user/wallet/address`
+`POST /api/v3.2/user/wallet/address` or `POST /api/v3.3/user/wallet/address`
 
 创建钱包地址。如果创建的地址之前未被使用，将返回一个400错误，并带有现有的未使用地址。要使用此API，需要`钱包`权限。
 
@@ -302,15 +474,15 @@ BTSE 的速率限制如下：
 
 | 名称     | 类型   | 必填 | 描述   |
 | ---      | ---    | ---  | ---    |
-| currency | string | Yes  | 例如：BTC  |
-| network  | string | Yes  | 例如：BITCOIN |
+| currency | String | Yes  | 例如：BTC  |
+| network  | String | Yes  | 例如：BITCOIN |
 
 ### 响应内容
 
 | 名称    | 类型   | 必填 | 描述            |
 | ---     | ---    | ---  | ---            |
-| address | string | Yes  | 区块链地址       |
-| created | long   | Yes  | 创建的时间戳     |
+| address | String | Yes  | 区块链地址       |
+| created | Long   | Yes  | 创建的时间戳     |
 
 ## 删除钱包地址
 
@@ -324,7 +496,7 @@ BTSE 的速率限制如下：
 }
 ```
 
-`DELETE /api/v3.2/user/wallet/address`
+`DELETE /api/v3.2/user/wallet/address` or `DELETE /api/v3.3/user/wallet/address`
 
 删除地址。如果删除的地址已经被删除 ，将返回一个400错误。要使用此API，需要`钱包`权限。
 
@@ -332,9 +504,9 @@ BTSE 的速率限制如下：
 
 | 名称     | 类型   | 必填 | 描述   |
 | ---      | ---    | ---  | ---    |
-| currency | string | Yes      | Ex: BTC     |
-| network  | string | Yes      | Ex: BITCOIN |
-| address  | string | Yes      | Ex: 地址 |
+| currency | String | Yes      | Ex: BTC     |
+| network  | String | Yes      | Ex: BITCOIN |
+| address  | String | Yes      | Ex: 地址 |
 
 ## 获取钱包地址
 
@@ -358,7 +530,7 @@ BTSE 的速率限制如下：
 ]
 ```
 
-`GET /api/v3.2/user/wallet/address`
+`GET /api/v3.2/user/wallet/address` or `GET /api/v3.3/user/wallet/address`
 
 获取钱包地址。要使用此API，需要`钱包`权限。
 
@@ -366,15 +538,15 @@ BTSE 的速率限制如下：
 
 | 名称     | 类型   | 必填 | 描述   |
 | ---      | ---    | ---  | ---    |
-| currency | string | Yes  | 例如：BTC  |
-| network  | string | Yes  | 例如：BITCOIN |
+| currency | String | Yes  | 例如：BTC  |
+| network  | String | Yes  | 例如：BITCOIN |
 
 ### 响应内容
 
 | 名称    | 类型   | 必填 | 描述            |
 | ---     | ---    | ---  | ---            |
-| address | string | Yes  | 区块链地址       |
-| created | long   | Yes  | 创建的时间戳     |
+| address | String | Yes  | 区块链地址       |
+| created | Long   | Yes  | 创建的时间戳     |
 
 ## 提款资金
 
@@ -393,11 +565,11 @@ BTSE 的速率限制如下：
 
 ```json
 {
-  "withdraw_id": "<withdrawal ID>"
+  "withdrawId": "<withdrawal ID>"
 }
 ```
 
-`POST /api/v3.2/user/wallet/withdraw`
+`POST /api/v3.2/user/wallet/withdraw` or `POST /api/v3.3/user/wallet/withdraw`
 
 执行钱包提款。要使用此API，需要`提币`权限。
 
@@ -405,17 +577,17 @@ BTSE 的速率限制如下：
 
 | 名称               | 类型    | 必填     | 描述                                                                                                                                                                                                                                                                                                       |
 | ---                | ---     | ---     | ---                                                                                                                                                                                                                                                                                                       |
-| currency           | string  | Yes     | 币种-网络对 <br> 币种列表可以从[可用的币种列表中获取操作](#query-available-currency-list-for-wallet-action) <br> 网络列表可以从[获取货币的可用网络列表](#query-available-crypto-network-list-for-currency)中检索                                        |
-| address            | string  | Yes     | 区块链地址                                                                                                                                                                                                                                                                                                |
-| tag                | string  | Yes     | 标签，仅由某些区块链使用（例如：XRP）                                                                                                                                                                                                                                                                       |
-| amount             | string  | Yes     | 提款金额（所有货币的最大小数位为`8`）。如果超出，将返回无效的提现金额（代码：3506）                                                                                                                                                                                                                         |
-| includeWithdrawFee | boolean | No      | 如果为true或字段不存在，则费用包含在金额中。否则，费用会额外增加，扣除的金额可能大于所声明的金额                                                                                                                                                                                                             |
+| currency           | String  | Yes     | 币种-网络对 <br> 币种列表可以从[可用的币种列表中获取操作](#query-available-currency-list-for-wallet-action) <br> 网络列表可以从[获取货币的可用网络列表](#query-available-crypto-network-list-for-currency)中检索                                        |
+| address            | String  | Yes     | 区块链地址                                                                                                                                                                                                                                                                                                |
+| tag                | String  | Yes     | 标签，仅由某些区块链使用（例如：XRP）                                                                                                                                                                                                                                                                       |
+| amount             | String  | Yes     | 提款金额（所有货币的最大小数位为`8`）。如果超出，将返回无效的提现金额（代码：3506）                                                                                                                                                                                                                         |
+| includeWithdrawFee | Boolean | No      | 如果为true或字段不存在，则费用包含在金额中。否则，费用会额外增加，扣除的金额可能大于所声明的金额                                                                                                                                                                                                             |
 
 ### 响应内容
 
 | 名称        | 类型   | 必填     | 描述                                                                                                                                                                                                        |
 | ---         | ---    | ---     | ---                                                                                                                                                                                                        |
-| withdraw_id | string | Yes     | 内部提款ID。参考`wallet_history` API中的`orderID`字段。由于提现不会立即处理。用户可以查询钱包历史API来检查提现的状态                                                                                           |
+| withdrawId | String | Yes     | 内部提款ID。参考`wallet_history` API中的`orderID`字段。由于提现不会立即处理。用户可以查询钱包历史API来检查提现的状态                                                                                           |
 
 
 ## 查询钱包操作的可用货币列表
@@ -446,7 +618,7 @@ BTSE 的速率限制如下：
 
 | 名称          | 类型   | 必填     | 描述              |
 | ---           | ---    | ---     | ---              |
-| $currencyName | string | Yes     | 货币的名称         |
+| $currencyName | String | Yes     | 货币的名称         |
 
 
 ## 转换资金
@@ -481,19 +653,19 @@ BTSE 的速率限制如下：
 
 | 名称      | 类型   | 必填    | 描述                     |
 | ---       | ---    | ---     | ---                      |
-| amount    | string | Yes     | 要转换的货币金额          |
-| fromAsset | string | Yes     | 要转换的源货币            |
-| toAsset   | string | Yes     | 目标货币                  |
+| amount    | String | Yes     | 要转换的货币金额          |
+| fromAsset | String | Yes     | 要转换的源货币            |
+| toAsset   | String | Yes     | 目标货币                  |
 
 ### 响应内容
 
 | 名称               | 类型   | 必填    | 描述                        |
 | ---                | ---    | ---     | ---                        |
-| amount             | float  | Yes     | 要转换的源货币金额           |
-| settlementAmount   | float  | Yes     | 转换后的目标货币金额         |
-| amountCurrency     | string | Yes     | 源货币                        |
-| settlementCurrency | string | Yes     | 目标货币                     |
-| rate               | float  | Yes     | 汇率                         |
+| amount             | Float  | Yes     | 要转换的源货币金额           |
+| settlementAmount   | Float  | Yes     | 转换后的目标货币金额         |
+| amountCurrency     | String | Yes     | 源货币                        |
+| settlementCurrency | String | Yes     | 目标货币                     |
+| rate               | Float  | Yes     | 汇率                         |
 
 ## 转账资金
 
@@ -519,7 +691,7 @@ BTSE 的速率限制如下：
 }
 ```
 
-`POST /api/v3.2/user/wallet/transfer`
+`POST /api/v3.2/user/wallet/transfer` or `POST /api/v3.3/user/wallet/transfer`
 
 执行钱包内的货币转给其他用户的操作。要使用此API，需要`转账`权限。要获取支持的货币列表，请查看[查询钱包操作的可用货币列表](#0ab39c1d97)
 
@@ -527,20 +699,20 @@ BTSE 的速率限制如下：
 
 | 名称               | 类型    | 必填    | 描述                                                           |
 | ---                | ---     | ---     | ---                                                            |
-| amount             | string  | Yes     | 要转账的货币金额                                                 |
-| asset              | string  | Yes     | 要转账的货币                                                     |
-| toUser             | string  | Yes     | 接收者的账号                                                     |
-| toUserMail         | string  | Yes     | 接收者的电子邮件                                                  |
-| useNewSymbolNaming | boolean | No      | 若使用新的期货市场名称在资产字段中为真，默认为假                  |
+| amount             | String  | Yes     | 要转账的货币金额                                                 |
+| asset              | String  | Yes     | 要转账的货币                                                     |
+| toUser             | String  | Yes     | 接收者的账号                                                     |
+| toUserMail         | String  | Yes     | 接收者的电子邮件                                                  |
+| useNewSymbolNaming | Boolean | No      | 若使用新的期货市场名称在资产字段中为真，默认为假                  |
 
 ### 响应内容
 
 | 名称       | 类型   | 必填    | 描述                           |
 | ---        | ---    | ---     | ---                           |
-| amount     | string | Yes     | 要转账的货币金额                |
-| asset      | string | Yes     | 要转账的货币                    |
-| toUser     | string | Yes     | 接收者的账号                    |
-| toUserMail | string | Yes     | 接收者的电子邮件                |
+| amount     | String | Yes     | 要转账的货币金额                |
+| asset      | String | Yes     | 要转账的货币                    |
+| toUser     | String | Yes     | 接收者的账号                    |
+| toUserMail | String | Yes     | 接收者的电子邮件                |
 
 ## 子帐号转账历史纪录
 
@@ -570,7 +742,7 @@ BTSE 的速率限制如下：
 }
 ```
 
-`POST /api/v3.2/subaccount/wallet/history`
+`GET /api/v3.2/subaccount/wallet/history`
 
 查询子帐号转帐历史纪录
 
@@ -578,20 +750,20 @@ BTSE 的速率限制如下：
 
 | 名称               | 类型    | 必填    | 描述                                                           |
 | ---                | ---     | ---     | ---                                                            |
-| startTime             | string  | Yes     | 要转账的货币金额                                                 |
-| endTime              | string  | Yes     | 要转账的货币                                                     |
-| page             | string  | Yes     | 接收者的账号                                                     |
-| pageSize         | string  | Yes     | 接收者的电子邮件                                                  |
+| startTime             | String  | Yes     | 要转账的货币金额                                                 |
+| endTime              | String  | Yes     | 要转账的货币                                                     |
+| page             | String  | Yes     | 接收者的账号                                                     |
+| pageSize         | String  | Yes     | 接收者的电子邮件                                                  |
 
 ### 响应内容
 
 | 名称       | 类型   | 必填    | 描述                           |
 | ---        | ---    | ---     | ---                           |
-| totalRows | integer | Yes     | 接收者的电子邮件                |
-| pageSize | integer | Yes     | 接收者的电子邮件                |
-| currentPage | integer | Yes     | 目前页数                |
-| timestamp | integer | Yes     | 发送时间                |
-| fromUser | string | Yes     | 发送者的账号                |
-| receiver | string | Yes     | 接收者的账号                |
-| currency | string | Yes     | 转账的货币                |
-| amount | integer | Yes     | 转账的货币金额                |
+| totalRows | Integer | Yes     | 接收者的电子邮件                |
+| pageSize | Integer | Yes     | 接收者的电子邮件                |
+| currentPage | Integer | Yes     | 目前页数                |
+| timestamp | Integer | Yes     | 发送时间                |
+| fromUser | String | Yes     | 发送者的账号                |
+| receiver | String | Yes     | 接收者的账号                |
+| currency | String | Yes     | 转账的货币                |
+| amount | Integer | Yes     | 转账的货币金额                |
